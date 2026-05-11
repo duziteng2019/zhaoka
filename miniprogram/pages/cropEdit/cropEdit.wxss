@@ -1,0 +1,228 @@
+/* cropEdit.wxss - 裁剪页 | 简约风格 */
+
+page {
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+.crop-container {
+  min-height: 100vh;
+  padding-bottom: 180rpx;
+}
+
+/* ============================================
+   页面头部
+   ============================================ */
+.header {
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  background: var(--bg-card);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.header-step {
+  font-size: var(--text-sm);
+  color: var(--primary);
+  background: rgba(37, 99, 235, 0.08);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================
+   预览区域
+   ============================================ */
+.preview-section {
+  padding: var(--space-lg) var(--space-md);
+}
+
+.preview-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.crop-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crop-box {
+  width: 60%;
+  height: 75%;
+  border: 4rpx solid var(--text-white);
+  border-radius: var(--radius-md);
+  position: relative;
+}
+
+.crop-corner {
+  position: absolute;
+  width: 32rpx;
+  height: 32rpx;
+  border-color: var(--primary);
+  border-style: solid;
+  border-width: 0;
+}
+
+.crop-corner.top-left {
+  top: -4rpx;
+  left: -4rpx;
+  border-top-width: 6rpx;
+  border-left-width: 6rpx;
+  border-top-left-radius: var(--radius-sm);
+}
+
+.crop-corner.top-right {
+  top: -4rpx;
+  right: -4rpx;
+  border-top-width: 6rpx;
+  border-right-width: 6rpx;
+  border-top-right-radius: var(--radius-sm);
+}
+
+.crop-corner.bottom-left {
+  bottom: -4rpx;
+  left: -4rpx;
+  border-bottom-width: 6rpx;
+  border-left-width: 6rpx;
+  border-bottom-left-radius: var(--radius-sm);
+}
+
+.crop-corner.bottom-right {
+  bottom: -4rpx;
+  right: -4rpx;
+  border-bottom-width: 6rpx;
+  border-right-width: 6rpx;
+  border-bottom-right-radius: var(--radius-sm);
+}
+
+.preview-hint {
+  text-align: center;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  margin-top: var(--space-md);
+}
+
+/* ============================================
+   工具栏
+   ============================================ */
+.tools-section {
+  padding: 0 var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+}
+
+.tool-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.tool-item:active {
+  transform: scale(0.98);
+}
+
+.tool-item.active {
+  background: var(--primary);
+}
+
+.tool-item.active .tool-text {
+  color: var(--text-white);
+}
+
+.tool-icon {
+  font-size: 36rpx;
+}
+
+.tool-text {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* ============================================
+   旋转控制
+   ============================================ */
+.rotate-section {
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.rotate-slider {
+  flex: 1;
+}
+
+.rotate-value {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  min-width: 80rpx;
+  text-align: center;
+}
+
+/* ============================================
+   底部按钮
+   ============================================ */
+.bottom-action {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: var(--space-md);
+}
+
+.bottom-action .btn {
+  flex: 1;
+  margin: 0;
+}
+
+/* ============================================
+   动画
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}

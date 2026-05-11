@@ -1,0 +1,96 @@
+<!--pages/home/home.wxml-->
+<view class="home-container page-container">
+
+  <!-- 主功能入口 -->
+  <view class="hero-card fade-in">
+    <view class="hero-content">
+      <view class="hero-badge">✨ AI智能制作</view>
+      <view class="hero-title">三步完成专业证件照</view>
+      <view class="hero-steps">
+        <view class="step-item">
+          <view class="step-num">1</view>
+          <view class="step-text">选择规格</view>
+        </view>
+        <view class="step-arrow">→</view>
+        <view class="step-item">
+          <view class="step-num">2</view>
+          <view class="step-text">上传照片</view>
+        </view>
+        <view class="step-arrow">→</view>
+        <view class="step-item">
+          <view class="step-num">3</view>
+          <view class="step-text">导出下载</view>
+        </view>
+      </view>
+    </view>
+    <button class="btn btn-primary btn-large btn-block" bindtap="startCreate">
+      立即制作
+    </button>
+  </view>
+
+  <!-- 常用规格 -->
+  <view class="specs-section fade-in">
+    <view class="section-header">
+      <view class="section-title">常用规格</view>
+    </view>
+    <view class="specs-grid">
+      <view class="spec-card" bindtap="selectSpec" data-spec="1">
+        <view class="spec-icon primary">1</view>
+        <view class="spec-info">
+          <text class="spec-name">一寸</text>
+          <text class="spec-desc">25×35mm</text>
+        </view>
+      </view>
+      <view class="spec-card" bindtap="selectSpec" data-spec="2">
+        <view class="spec-icon secondary">2</view>
+        <view class="spec-info">
+          <text class="spec-name">二寸</text>
+          <text class="spec-desc">35×49mm</text>
+        </view>
+      </view>
+      <view class="spec-card" bindtap="selectSpec" data-spec="3">
+        <view class="spec-icon accent">护</view>
+        <view class="spec-info">
+          <text class="spec-name">护照</text>
+          <text class="spec-desc">33×48mm</text>
+        </view>
+      </view>
+      <view class="spec-card" bindtap="selectSpec" data-spec="4">
+        <view class="spec-icon success">签</view>
+        <view class="spec-info">
+          <text class="spec-name">签证</text>
+          <text class="spec-desc">35×45mm</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 功能说明 -->
+  <view class="features-section fade-in">
+    <view class="section-header">
+      <view class="section-title">服务特色</view>
+    </view>
+    <view class="features-grid">
+      <view class="feature-item">
+        <view class="feature-icon">🎯</view>
+        <view class="feature-title">智能抠图</view>
+        <view class="feature-desc">AI精准识别人像</view>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">🎨</view>
+        <view class="feature-title">多色背景</view>
+        <view class="feature-desc">白/蓝/红背景可选</view>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">📱</view>
+        <view class="feature-title">高清导出</view>
+        <view class="feature-desc">多种分辨率支持</view>
+      </view>
+      <view class="feature-item">
+        <view class="feature-icon">📁</view>
+        <view class="feature-title">历史记录</view>
+        <view class="feature-desc">随时查看和下载</view>
+      </view>
+    </view>
+  </view>
+</view>

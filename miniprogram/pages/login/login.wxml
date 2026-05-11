@@ -1,0 +1,52 @@
+<!-- pages/login/login.wxml -->
+<view class="login-container page-container">
+  <!-- 页面头部 -->
+  <view class="header fade-in">
+    <h1 class="title">用户登录</h1>
+    <p class="subtitle">欢迎回到证件照制作平台</p>
+  </view>
+
+  <!-- 登录表单 -->
+  <view class="form-section slide-in-left">
+    <form bindsubmit="login">
+      <!-- 用户名输入 -->
+      <view class="form-group">
+        <label class="form-label">用户名</label>
+        <input 
+          class="form-input" 
+          name="username" 
+          placeholder="请输入用户名" 
+          type="text" 
+          value="{{formData.username}}" 
+          bindinput="onInput"
+          required
+        />
+      </view>
+
+      <!-- 密码输入 -->
+      <view class="form-group">
+        <label class="form-label">密码</label>
+        <input 
+          class="form-input" 
+          name="password" 
+          placeholder="请输入密码" 
+          type="password" 
+          value="{{formData.password}}" 
+          bindinput="onInput"
+          required
+        />
+      </view>
+
+      <!-- 登录按钮 -->
+      <button class="btn btn-primary form-button" form-type="submit" loading="{{loading}}">
+        {{loading ? '登录中...' : '立即登录'}}
+      </button>
+
+      <!-- 跳转注册 -->
+      <view class="form-footer">
+        <text class="footer-text">还没有账号？</text>
+        <navigator class="footer-link" url="/pages/register/register">立即注册</navigator>
+      </view>
+    </form>
+  </view>
+</view>

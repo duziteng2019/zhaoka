@@ -1,0 +1,53 @@
+/* 设计令牌统一导入文件 v2.0 - 赛博朋克科技感 */
+@import '../app.wxss';
+
+/* 文本样式 */
+.text-primary{color:var(--text-primary)}.text-secondary{color:var(--text-secondary)}.text-tertiary{color:var(--text-tertiary)}.text-cyan{color:var(--accent-cyan);text-shadow:0 0 10rpx var(--shadow-glow)}.text-pink{color:var(--accent-pink);text-shadow:0 0 10rpx var(--shadow-pink)}.text-orange{color:var(--accent-orange)}
+.text-xs{font-size:20rpx}.text-sm{font-size:22rpx}.text-base{font-size:24rpx}.text-md{font-size:26rpx}.text-lg{font-size:28rpx}.text-xl{font-size:30rpx}.text-2xl{font-size:32rpx}.text-3xl{font-size:36rpx}.text-4xl{font-size:40rpx}.text-5xl{font-size:48rpx}
+.font-light{font-weight:300}.font-normal{font-weight:400}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-bold{font-weight:700}
+
+/* 间距 */
+.p-0{padding:0}.p-1{padding:4rpx}.p-2{padding:8rpx}.p-3{padding:12rpx}.p-4{padding:16rpx}.p-5{padding:20rpx}.p-6{padding:24rpx}.p-8{padding:32rpx}.p-10{padding:40rpx}.p-12{padding:48rpx}
+.m-0{margin:0}.m-1{margin:4rpx}.m-2{margin:8rpx}.m-3{margin:12rpx}.m-4{margin:16rpx}.m-5{margin:20rpx}.m-6{margin:24rpx}.m-8{margin:32rpx}.m-10{margin:40rpx}
+.mt-0{margin-top:0}.mt-1{margin-top:4rpx}.mt-2{margin-top:8rpx}.mt-3{margin-top:12rpx}.mt-4{margin-top:16rpx}.mt-5{margin-top:20rpx}.mt-6{margin-top:24rpx}.mt-8{margin-top:32rpx}.mt-10{margin-top:40rpx}
+.mb-0{margin-bottom:0}.mb-1{margin-bottom:4rpx}.mb-2{margin-bottom:8rpx}.mb-3{margin-bottom:12rpx}.mb-4{margin-bottom:16rpx}.mb-5{margin-bottom:20rpx}.mb-6{margin-bottom:24rpx}.mb-8{margin-bottom:32rpx}.mb-10{margin-bottom:40rpx}
+
+/* 布局 */
+.flex{display:flex}.flex-row{flex-direction:row}.flex-column{flex-direction:column}.justify-start{justify-content:flex-start}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.justify-between{justify-content:space-between}.justify-around{justify-content:space-around}.align-start{align-items:flex-start}.align-center{align-items:center}.align-end{align-items:flex-end}.flex-wrap{flex-wrap:wrap}.flex-1{flex:1}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24rpx}.grid-cols-1{grid-template-columns:1fr}.grid-cols-2{grid-template-columns:repeat(2,1fr)}.grid-cols-3{grid-template-columns:repeat(3,1fr)}
+
+/* 卡片 */
+.card{background:var(--card-glass);border-radius:var(--radius-xl);padding:var(--spacing-10);border:2rpx solid var(--card-border);backdrop-filter:blur(24rpx);box-shadow:var(--shadow-lg)}.card-sm{padding:var(--spacing-6);border-radius:var(--radius-lg)}.card-lg{padding:var(--spacing-12);border-radius:var(--radius-2xl)}
+
+/* 按钮 */
+.btn{display:flex;align-items:center;justify-content:center;height:96rpx;border-radius:var(--radius-lg);font-size:var(--text-xl);font-weight:var(--font-semibold);transition:all var(--duration-normal) var(--ease)}
+.btn-primary{background:var(--accent-primary);color:var(--bg-primary);box-shadow:var(--shadow-glow);border:2rpx solid var(--accent-primary)}
+.btn-secondary{background:var(--accent-secondary);color:var(--text-primary);box-shadow:var(--shadow-glow-pink);border:2rpx solid var(--accent-secondary)}
+.btn-ghost{background:transparent;color:var(--accent-primary);border:2rpx solid var(--accent-primary)}
+.btn-sm{height:72rpx;font-size:var(--text-lg);padding:0 var(--spacing-6)}
+.btn-lg{height:108rpx;font-size:var(--text-2xl);padding:0 var(--spacing-12)}
+
+/* 徽章 */
+.badge{display:inline-flex;align-items:center;padding:8rpx 20rpx;border-radius:var(--radius-sm);font-size:var(--text-sm);font-weight:var(--font-semibold)}
+.badge-cyan{background:rgba(0,240,255,0.15);color:var(--accent-cyan);border:1rpx solid rgba(0,240,255,0.4)}
+.badge-pink{background:rgba(255,46,125,0.15);color:var(--accent-pink);border:1rpx solid rgba(255,46,125,0.4)}
+.badge-orange{background:rgba(255,107,0,0.15);color:var(--accent-orange);border:1rpx solid rgba(255,107,0,0.4)}
+
+/* 输入框 */
+.input{background:var(--bg-tertiary);border:2rpx solid var(--border-glow);border-radius:var(--radius-md);padding:var(--spacing-4) var(--spacing-6);color:var(--text-primary);font-size:var(--text-base);transition:all var(--duration-fast) var(--ease)}.input:focus{border-color:var(--accent-primary);box-shadow:0 0 10rpx var(--shadow-glow)}
+
+/* 工具 */
+.hidden{display:none}.block{display:block}.inline-block{display:inline-block}
+.text-left{text-align:left}.text-center{text-align:center}.text-right{text-align:right}
+.relative{position:relative}.absolute{position:absolute}.fixed{position:fixed}
+.w-full{width:100%}.h-full{height:100%}
+.rounded-none{border-radius:0}.rounded-sm{border-radius:var(--radius-sm)}.rounded{border-radius:var(--radius-md)}.rounded-lg{border-radius:var(--radius-lg)}.rounded-xl{border-radius:var(--radius-xl)}.rounded-2xl{border-radius:var(--radius-2xl)}.rounded-full{border-radius:var(--radius-full)}
+.shadow-none{box-shadow:none}.shadow-sm{box-shadow:var(--shadow-sm)}.shadow{box-shadow:var(--shadow-md)}.shadow-lg{box-shadow:var(--shadow-lg)}.shadow-glow{box-shadow:var(--shadow-glow)}.shadow-glow-pink{box-shadow:var(--shadow-glow-pink)}
+
+/* 动画 */
+.fade-in{animation:fadeIn 0.4s ease forwards}.slide-in-left{animation:slideInLeft 0.4s ease forwards}.slide-in-right{animation:slideInRight 0.4s ease forwards}.pulse{animation:pulse 2s ease-in-out infinite}.glow-pulse{animation:glowPulse 2s ease-in-out infinite}
+@keyframes fadeIn{from{opacity:0;transform:translateY(30rpx)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideInLeft{from{opacity:0;transform:translateX(-50rpx)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideInRight{from{opacity:0;transform:translateX(50rpx)}to{opacity:1;transform:translateX(0)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 10rpx var(--shadow-glow)}50%{box-shadow:0 0 30rpx var(--shadow-glow),0 0 50rpx rgba(0,240,255,0.3)}}

@@ -1,0 +1,32 @@
+<!--pages/history/history.wxml-->
+<view class="history-container page-container">
+  <!-- 页面头部 -->
+  <view class="header fade-in">
+    <view class="header-title">历史记录</view>
+  </view>
+
+  <!-- 历史列表 -->
+  <view class="history-list" wx:if="{{historyList.length > 0}}">
+    <view class="history-item fade-in" wx:for="{{historyList}}" wx:key="id" bindtap="viewDetail" data-id="{{item.id}}">
+      <view class="item-thumb">
+        <image src="{{item.thumbUrl}}" mode="aspectFill"></image>
+      </view>
+      <view class="item-info">
+        <view class="item-title">{{item.specName}}</view>
+        <view class="item-meta">
+          <text class="meta-date">{{item.createTime}}</text>
+          <text class="meta-status {{item.status}}">{{item.statusText}}</text>
+        </view>
+      </view>
+      <view class="item-arrow">›</view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:else>
+    <view class="empty-icon">📁</view>
+    <view class="empty-text">暂无历史记录</view>
+    <view class="empty-hint">完成制作后将在此显示</view>
+    <button class="btn btn-primary" bindtap="goHome">开始制作</button>
+  </view>
+</view>

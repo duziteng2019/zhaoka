@@ -1,0 +1,65 @@
+<!--pages/upload/upload.wxml-->
+<view class="upload-container page-container">
+  <!-- 页面头部 -->
+  <view class="header fade-in">
+    <view class="header-title">上传照片</view>
+    <view class="header-step">第 1 步</view>
+  </view>
+
+  <!-- 上传区域 -->
+  <view class="upload-section fade-in">
+    <view class="upload-area" bindtap="chooseImage">
+      <view class="upload-placeholder" wx:if="{{!tempFilePath}}">
+        <view class="upload-icon">📷</view>
+        <view class="upload-text">点击上传照片</view>
+        <view class="upload-hint">支持 JPG、PNG 格式</view>
+      </view>
+      <image wx:else class="preview-image" src="{{tempFilePath}}" mode="aspectFit"></image>
+      <view class="upload-mask" wx:if="{{tempFilePath}}">
+        <view class="mask-btn">重新选择</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 上传方式 -->
+  <view class="actions-section fade-in">
+    <view class="action-buttons">
+      <view class="action-btn" bindtap="chooseImage">
+        <view class="action-icon">🖼️</view>
+        <view class="action-text">相册选择</view>
+      </view>
+      <view class="action-btn" bindtap="takePhoto">
+        <view class="action-icon">📸</view>
+        <view class="action-text">拍照上传</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 拍摄建议 -->
+  <view class="tips-section fade-in">
+    <view class="tips-header">
+      <view class="tips-title">📌 拍摄建议</view>
+    </view>
+    <view class="tips-grid">
+      <view class="tip-item">
+        <view class="tip-icon">💡</view>
+        <view class="tip-text">光线充足</view>
+      </view>
+      <view class="tip-item">
+        <view class="tip-icon">👤</view>
+        <view class="tip-text">正面直视</view>
+      </view>
+      <view class="tip-item">
+        <view class="tip-icon">🎨</view>
+        <view class="tip-text">背景简洁</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="bottom-action">
+    <button class="btn btn-primary btn-large btn-block" bindtap="goNext" disabled="{{!tempFilePath}}">
+      下一步
+    </button>
+  </view>
+</view>

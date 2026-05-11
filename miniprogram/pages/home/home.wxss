@@ -1,0 +1,217 @@
+/* home.wxss - 首页 | 简约风格 */
+
+/* 页面容器 */
+page {
+  background: var(--bg-page);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.home-container {
+  min-height: 100vh;
+  padding-bottom: 180rpx;
+}
+
+/* ============================================
+   Hero 卡片
+   ============================================ */
+.hero-card {
+  margin: var(--space-md);
+  padding: var(--space-lg);
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.hero-content {
+  margin-bottom: var(--space-lg);
+}
+
+.hero-badge {
+  display: inline-block;
+  font-size: var(--text-sm);
+  color: var(--primary);
+  background: rgba(37, 99, 235, 0.08);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+  margin-bottom: var(--space-sm);
+}
+
+.hero-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.hero-steps {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--space-sm);
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.step-num {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: var(--primary);
+  color: var(--text-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  font-weight: 600;
+}
+
+.step-text {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.step-arrow {
+  font-size: var(--text-lg);
+  color: var(--text-muted);
+  margin-top: -24rpx;
+}
+
+/* ============================================
+   规格网格
+   ============================================ */
+.specs-section {
+  padding: 0 var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-md);
+}
+
+.section-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+.spec-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.spec-card:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-sm);
+  background: var(--bg-hover);
+}
+
+.spec-icon {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text-white);
+  flex-shrink: 0;
+}
+
+.spec-icon.primary { background: var(--primary); }
+.spec-icon.secondary { background: var(--text-secondary); }
+.spec-icon.accent { background: var(--warning); }
+.spec-icon.success { background: var(--success); }
+
+.spec-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.spec-name {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.spec-desc {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ============================================
+   功能说明
+   ============================================ */
+.features-section {
+  padding: 0 var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+.feature-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+
+.feature-icon {
+  font-size: 48rpx;
+  margin-bottom: var(--space-sm);
+}
+
+.feature-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4rpx;
+}
+
+.feature-desc {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* ============================================
+   动画
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}

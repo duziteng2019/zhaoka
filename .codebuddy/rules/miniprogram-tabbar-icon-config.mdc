@@ -1,0 +1,177 @@
+---
+description: 
+alwaysApply: true
+enabled: true
+updatedAt: 2026-01-12T01:09:49.423Z
+provider: 
+---
+
+# 微信小程序 TabBar 图标配置指南
+
+## 🔧 TabBar 配置要求
+
+### 1. 图标文件规范
+
+**文件路径：** `miniprogram/images/tabbar/`
+
+**必需文件：**
+- `{icon}.png` - 未选中状态图标
+- `{icon}-active.png` - 选中状态图标
+
+**图标尺寸：**
+- 推荐尺寸：81px × 81px
+- 格式：PNG（必需）
+- 颜色模式：RGB 或 RGBA（支持透明）
+
+### 2. 配置文件路径
+
+**主配置文件：** [miniprogram/app.json](mdc:miniprogram/app.json)
+
+### 3. TabBar 配置结构
+
+```json
+{
+  "tabBar": {
+    "color": "#未选中颜色",
+    "selectedColor": "#选中颜色",
+    "backgroundColor": "#背景颜色",
+    "borderStyle": "black|white",
+    "list": [
+      {
+        "pagePath": "页面路径",
+        "text": "文本",
+        "iconPath": "images/tabbar/icon.png",
+        "selectedIconPath": "images/tabbar/icon-active.png"
+      }
+    ]
+  }
+}
+```
+
+## ⚠️ 常见问题与解决方案
+
+### 问题 1：图标不显示
+
+**症状：** `iconPath not found` 错误
+
+**原因：**
+1. 图标文件不存在
+2. 路径配置错误
+3. 使用了 `"custom": true` 但未实现自定义组件
+
+**解决方案：**
+1. 确保图标文件存在于 `miniprogram/images/tabbar/` 目录
+2. 检查路径是否正确（相对于 `miniprogram/` 根目录）
+3. 如无自定义需求，移除 `"custom": true`
+
+### 问题 2：图标尺寸不当
+
+**症状：** 图标模糊或显示异常
+
+**原因：** 图标尺寸不符合微信小程序规范
+
+**解决方案：**
+- 使用 81px × 81px 的 PNG 图标
+- 保持图标大小一致
+- 使用矢量图形设计工具导出高质量 PNG
+
+### 问题 3：图标颜色不符合主题
+
+**症状：** 未选中/选中状态颜色不协调
+
+**解决方案：**
+- 未选中颜色：使用中性灰色（如 #2D3436）
+- 选中颜色：使用主题色（如 #FF6B35）
+- 确保图标与配置中的 `color` 和 `selectedColor` 配合
+
+## 📋 图标创建自动化脚本
+
+当需要创建新的 TabBar 图标时，参考以下 Python 脚本结构：
+
+```python
+from PIL import Image, ImageDraw
+import os
+
+def create_tabbar_icons(color_gray, color_active, icon_type, output_dir):
+    """创建 TabBar 图标
+    
+    Args:
+        color_gray: 未选中颜色 (RGB 元组)
+        color_active: 选中颜色 (RGB 元组)
+        icon_type: 图标类型 ('home', 'history', 'profile' 等)
+        output_dir: 输出目录
+    """
+    # 创建 81x81 图标
+    size = (81, 81)
+    
+    for color, suffix in [(color_gray, ''), (color_active, '-active')]:
+        img = Image.new('RGBA', size, (255, 255, 255, 255))
+        draw = ImageDraw.Draw(img)
+        
+        # 根据图标类型绘制
+        if icon_type == 'home':
+            # 绘制房子图标
+            pass
+        elif icon_type == 'history':
+            # 绘制时钟图标
+            pass
+        elif icon_type == 'profile':
+            # 绘制用户图标
+            pass
+        
+        filename = f'{output_dir}/{icon_type}{suffix}.png'
+        img.save(filename)
+```
+
+## 🎨 设计建议
+
+### 图标设计原则
+1. **简洁性**：避免过多细节，保持图标清晰
+2. **一致性**：所有图标风格统一
+3. **对比度**：确保图标在白色背景下清晰可见
+4. **主题性**：图标形状应与其功能相关
+
+### 推荐图标类型
+- **首页**：房子、主页图标
+- **历史**：时钟、时间轴图标
+- **我的**：用户、个人中心图标
+- **发现**：放大镜、指南针图标
+- **消息**：信封、对话气泡图标
+
+## 🔍 配置检查清单
+
+在部署前，确保：
+
+- [ ] 所有图标文件已创建（包含 normal 和 active 版本）
+- [ ] 图标尺寸为 81px × 81px
+- [ ] 图标格式为 PNG
+- [ ] `app.json` 中路径配置正确
+- [ ] 颜色值使用十六进制格式（如 #FF6B35）
+- [ ] 没有使用 `"custom": true`（除非确实需要自定义 TabBar）
+- [ ] 所有页面路径在 `pages` 数组中已定义
+- [ ] 图标文件大小合理（建议 < 40KB）
+
+## 📝 项目当前配置
+
+**项目中的 TabBar 配置：**
+- 首页：`pages/home/home` - 房子图标
+- 历史：`pages/history/history` - 时钟图标
+- 我的：`pages/profile/profile` - 用户图标
+
+**颜色配置：**
+- 未选中：#2D3436（深灰）
+- 选中：#FF6B35（主题橙）
+- 背景：#F7F3E8（米白）
+
+## 🚀 快速操作命令
+
+```bash
+# 检查图标文件是否存在
+ls -la miniprogram/images/tabbar/
+
+# 使用 Python 脚本创建图标
+python create_tabbar_icons.py
+
+# 验证 JSON 配置格式
+cat miniprogram/app.json | python -m json.tool
+```

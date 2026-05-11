@@ -1,0 +1,35 @@
+<!-- pages/historyDetail/historyDetail.wxml -->
+<view class="page-container">
+  <view class="header text-center fade-in">
+    <view class="card-title text-xl">历史详情</view>
+    <view class="card-subtitle">查看和管理这条历史记录</view>
+  </view>
+
+  <view class="preview-section">
+    <view class="preview-card">
+      <image src="{{currentHistory.previewUrl}}" class="preview-image" />
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">详细信息</view>
+    <view class="info-row">
+      <text class="info-label">规格：</text>
+      <text class="info-value">{{currentHistory.specName}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">背景：</text>
+      <text class="info-value">{{currentHistory.bgColorName}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">创建时间：</text>
+      <text class="info-value">{{currentHistory.createTime}}</text>
+    </view>
+  </view>
+
+  <view class="actions-section">
+    <button class="btn btn-success btn-block" bindtap="downloadHistory">下载图片</button>
+    <button class="btn btn-primary btn-block" bindtap="editHistory">重新编辑</button>
+    <button class="btn btn-danger btn-block" bindtap="deleteHistory">删除记录</button>
+  </view>
+</view>

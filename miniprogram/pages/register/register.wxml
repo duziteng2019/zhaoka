@@ -1,0 +1,67 @@
+<!-- pages/register/register.wxml -->
+<view class="register-container page-container">
+  <!-- 页面头部 -->
+  <view class="header fade-in">
+    <h1 class="title">用户注册</h1>
+    <p class="subtitle">创建您的证件照制作账号</p>
+  </view>
+
+  <!-- 注册表单 -->
+  <view class="form-section slide-in-left">
+    <form bindsubmit="register">
+      <!-- 用户名输入 -->
+      <view class="form-group">
+        <label class="form-label">用户名</label>
+        <input 
+          class="form-input" 
+          name="username" 
+          placeholder="请输入用户名" 
+          type="text" 
+          value="{{formData.username}}" 
+          bindinput="onInput"
+          required
+        />
+      </view>
+
+      <!-- 密码输入 -->
+      <view class="form-group">
+        <label class="form-label">密码</label>
+        <input 
+          class="form-input" 
+          name="password" 
+          placeholder="请输入密码（至少6位）" 
+          type="password" 
+          value="{{formData.password}}" 
+          bindinput="onInput"
+          required
+          password-confirm="{{formData.confirmPassword}}"
+        />
+      </view>
+
+      <!-- 确认密码 -->
+      <view class="form-group">
+        <label class="form-label">确认密码</label>
+        <input 
+          class="form-input" 
+          name="confirmPassword" 
+          placeholder="请再次输入密码" 
+          type="password" 
+          value="{{formData.confirmPassword}}" 
+          bindinput="onInput"
+          required
+        />
+      </view>
+
+      <!-- 注册按钮 -->
+      <button class="btn btn-primary form-button" form-type="submit" loading="{{loading}}">
+        {{loading ? '注册中...' : '立即注册'}}
+      </button>
+
+      <!-- 跳转登录 -->
+      <view class="form-footer">
+        <text class="footer-text">已有账号？</text>
+        <navigator class="footer-link" url="/pages/login/login">立即登录</navigator>
+      </view>
+    </form>
+  </view>
+</view>

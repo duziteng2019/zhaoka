@@ -1,0 +1,86 @@
+/* pages/sizeSelect/sizeSelect.wxss */
+/* Uses CSS variables and utility classes from app.wxss */
+
+.specs-section {
+  padding: 0 var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.spec-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  border: 3rpx solid transparent;
+}
+
+.spec-card:active {
+  box-shadow: var(--shadow-md);
+}
+
+.spec-card.selected {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2rpx rgba(43, 108, 176, 0.15), var(--shadow-md);
+}
+
+.spec-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-xs);
+}
+
+.spec-name {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.spec-check {
+  width: 44rpx;
+  height: 44rpx;
+  background: var(--primary);
+  color: var(--text-white);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.spec-size {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xs);
+}
+
+.size-value {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.size-unit {
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+}
+
+.spec-desc {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.next-section {
+  padding: var(--space-lg) var(--space-md);
+}
+
+.next-section .btn[disabled] {
+  opacity: 0.5;
+  box-shadow: none;
+}

@@ -1,0 +1,224 @@
+/* upload.wxss - 上传页 | 简约风格 */
+
+page {
+  background: var(--bg-page);
+  min-height: 100vh;
+}
+
+.upload-container {
+  min-height: 100vh;
+  padding-bottom: 180rpx;
+}
+
+/* ============================================
+   页面头部
+   ============================================ */
+.header {
+  padding: var(--space-lg) var(--space-md) var(--space-md);
+  background: var(--bg-card);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.header-step {
+  font-size: var(--text-sm);
+  color: var(--primary);
+  background: rgba(37, 99, 235, 0.08);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================
+   上传区域
+   ============================================ */
+.upload-section {
+  padding: var(--space-lg) var(--space-md);
+}
+
+.upload-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: var(--bg-card);
+  border: 4rpx dashed var(--border);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.upload-area:active {
+  border-color: var(--primary);
+  background: rgba(37, 99, 235, 0.02);
+}
+
+.upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.upload-icon {
+  font-size: 96rpx;
+  opacity: 0.6;
+}
+
+.upload-text {
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.upload-hint {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.upload-mask {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.5);
+  padding: var(--space-md);
+  display: flex;
+  justify-content: center;
+}
+
+.mask-btn {
+  font-size: var(--text-sm);
+  color: var(--text-white);
+  background: rgba(255, 255, 255, 0.2);
+  padding: var(--space-xs) var(--space-md);
+  border-radius: var(--radius-full);
+}
+
+/* ============================================
+   操作按钮
+   ============================================ */
+.actions-section {
+  padding: 0 var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-md);
+}
+
+.action-btn {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+
+.action-btn:active {
+  transform: scale(0.98);
+  background: var(--bg-hover);
+}
+
+.action-icon {
+  font-size: 48rpx;
+}
+
+.action-text {
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* ============================================
+   拍摄建议
+   ============================================ */
+.tips-section {
+  padding: 0 var(--space-md);
+}
+
+.tips-header {
+  margin-bottom: var(--space-md);
+}
+
+.tips-title {
+  font-size: var(--text-base);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+}
+
+.tip-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  box-shadow: var(--shadow-sm);
+}
+
+.tip-icon {
+  font-size: 36rpx;
+}
+
+.tip-text {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+/* ============================================
+   底部按钮
+   ============================================ */
+.bottom-action {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+}
+
+.bottom-action .btn[disabled] {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+/* ============================================
+   动画
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.4s ease forwards;
+}

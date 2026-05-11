@@ -1,0 +1,9 @@
+<!--custom-tab-bar/index.wxml-->
+<view class="tab-bar">
+  <view class="tab-bar-item" wx:for="{{list}}" wx:key="index" bindtap="switchTab" data-path="{{item.pagePath}}" data-index="{{index}}">
+    <view class="icon-wrapper">
+      <icon class="iconfont {{selected === index ? item.selectedIconClass : item.iconClass}}" type="{{item.iconType}}" size="28"></icon>
+    </view>
+    <view class="tab-bar-text {{selected === index ? 'selected' : ''}}">{{item.text}}</view>
+  </view>
+</view>

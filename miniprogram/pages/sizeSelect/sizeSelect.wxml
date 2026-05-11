@@ -1,0 +1,33 @@
+<!-- pages/sizeSelect/sizeSelect.wxml -->
+<view class="page-container">
+  <view class="header text-center fade-in">
+    <view class="card-title text-xl">选择证件照规格</view>
+    <view class="card-subtitle">请选择您需要的证件照尺寸</view>
+  </view>
+
+  <view class="specs-section">
+    <view
+      wx:for="{{specs}}"
+      wx:key="id"
+      class="spec-card {{selectedSpec && selectedSpec.id == item.id ? 'selected' : ''}}"
+      bindtap="selectSpec"
+      data-spec="{{item}}"
+    >
+      <view class="spec-header">
+        <view class="spec-name">{{item.name}}</view>
+        <view class="spec-check" wx:if="selectedSpec && selectedSpec.id == item.id">✓</view>
+      </view>
+      <view class="spec-size">
+        <text class="size-value">{{item.width_mm}}×{{item.height_mm}}</text>
+        <text class="size-unit">mm</text>
+      </view>
+      <view class="spec-desc">{{item.pixel_width}}×{{item.pixel_height}} 像素</view>
+    </view>
+  </view>
+
+  <view class="next-section">
+    <button class="btn btn-accent btn-block btn-large" disabled="{{!selectedSpec}}" bindtap="goToCrop">
+      下一步
+    </button>
+  </view>
+</view>

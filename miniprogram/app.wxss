@@ -1,0 +1,392 @@
+/* ============================================
+   证件照小程序 - 全局样式
+   简约专业风格
+   ============================================ */
+
+/* ============================================
+   设计令牌
+   ============================================ */
+page {
+  /* 主色调 */
+  --primary:       #2563EB;
+  --primary-light: #3B82F6;
+  --primary-dark:  #1D4ED8;
+  
+  /* 中性色 */
+  --text-primary:   #111827;
+  --text-secondary: #6B7280;
+  --text-muted:    #9CA3AF;
+  --text-white:    #FFFFFF;
+  
+  /* 背景色 */
+  --bg-page:       #F9FAFB;
+  --bg-card:       #FFFFFF;
+  --bg-hover:      #F3F4F6;
+  
+  /* 边框色 */
+  --border:        #E5E7EB;
+  --border-light:  #F3F4F6;
+  
+  /* 状态色 */
+  --success:       #10B981;
+  --warning:       #F59E0B;
+  --danger:        #EF4444;
+  --info:          #3B82F6;
+  
+  /* 圆角 */
+  --radius-sm:     8rpx;
+  --radius-md:     12rpx;
+  --radius-lg:     16rpx;
+  --radius-full:   9999px;
+  
+  /* 阴影 */
+  --shadow-sm:     0 1rpx 3rpx rgba(0,0,0,0.06);
+  --shadow-md:     0 4rpx 12rpx rgba(0,0,0,0.08);
+  --shadow-lg:     0 8rpx 24rpx rgba(0,0,0,0.12);
+  
+  /* 字号 */
+  --text-xs:       22rpx;
+  --text-sm:       24rpx;
+  --text-base:     28rpx;
+  --text-md:       30rpx;
+  --text-lg:       34rpx;
+  --text-xl:       38rpx;
+  --text-2xl:      44rpx;
+  
+  /* 间距 */
+  --space-xs:      8rpx;
+  --space-sm:      16rpx;
+  --space-md:      24rpx;
+  --space-lg:      32rpx;
+  --space-xl:      48rpx;
+  
+  background: var(--bg-page);
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  min-height: 100vh;
+  color: var(--text-primary);
+  font-size: var(--text-base);
+  line-height: 1.6;
+}
+
+/* ============================================
+   页面容器
+   ============================================ */
+.page-container {
+  min-height: 100vh;
+  padding-bottom: 140rpx;
+}
+
+.container {
+  padding: var(--space-md);
+}
+
+/* ============================================
+   卡片
+   ============================================ */
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.card-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.card-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================
+   按钮
+   ============================================ */
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 88rpx;
+  border-radius: var(--radius-md);
+  font-size: var(--text-md);
+  font-weight: 600;
+  padding: 0 48rpx;
+  margin: var(--space-sm) 0;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: var(--text-white);
+}
+
+.btn-primary:active {
+  background: var(--primary-dark);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--primary);
+  border: 2rpx solid var(--primary);
+}
+
+.btn-ghost:active {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.btn-success {
+  background: var(--success);
+  color: var(--text-white);
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: var(--text-white);
+}
+
+.btn-large {
+  height: 100rpx;
+  font-size: var(--text-lg);
+}
+
+.btn-block {
+  width: 100%;
+}
+
+.btn-icon {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: var(--radius-md);
+  background: var(--bg-hover);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-icon.active {
+  background: var(--primary);
+  color: var(--text-white);
+}
+
+/* ============================================
+   表单
+   ============================================ */
+.form-input {
+  width: 100%;
+  height: 88rpx;
+  padding: 0 24rpx;
+  background: var(--bg-card);
+  border: 2rpx solid var(--border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  color: var(--text-primary);
+  box-sizing: border-box;
+}
+
+.form-input:focus {
+  border-color: var(--primary);
+}
+
+.form-input.error {
+  border-color: var(--danger);
+}
+
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+  margin-bottom: var(--space-xs);
+  display: block;
+}
+
+/* ============================================
+   列表项
+   ============================================ */
+.list-item {
+  display: flex;
+  align-items: center;
+  padding: var(--space-md);
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  margin-bottom: var(--space-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.list-item:active {
+  background: var(--bg-hover);
+}
+
+/* ============================================
+   徽章
+   ============================================ */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4rpx 16rpx;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: 500;
+}
+
+.badge-primary {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary);
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+}
+
+.badge-danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+}
+
+/* ============================================
+   空状态
+   ============================================ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl) 0;
+}
+
+.empty-icon {
+  width: 160rpx;
+  height: 160rpx;
+  margin-bottom: var(--space-md);
+  opacity: 0.4;
+}
+
+.empty-text {
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  margin-bottom: var(--space-xs);
+}
+
+.empty-hint {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* ============================================
+   Flex 布局辅助
+   ============================================ */
+.flex-row { display: flex; flex-direction: row; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-1 { flex: 1; }
+.flex-wrap { flex-wrap: wrap; }
+.gap-xs { gap: var(--space-xs); }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+
+/* ============================================
+   文本
+   ============================================ */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+.text-primary { color: var(--primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+.text-white { color: var(--text-white); }
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
+.text-bold { font-weight: 600; }
+.text-sm { font-size: var(--text-sm); }
+.text-xs { font-size: var(--text-xs); }
+.text-lg { font-size: var(--text-lg); }
+.text-xl { font-size: var(--text-xl); }
+.text-ellipsis { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ============================================
+   间距
+   ============================================ */
+.mt-xs { margin-top: var(--space-xs); }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+.mt-xl { margin-top: var(--space-xl); }
+.mb-xs { margin-bottom: var(--space-xs); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+.ml-sm { margin-left: var(--space-sm); }
+.mr-sm { margin-right: var(--space-sm); }
+.p-sm { padding: var(--space-sm); }
+.p-md { padding: var(--space-md); }
+
+/* ============================================
+   分割线
+   ============================================ */
+.divider {
+  height: 2rpx;
+  background: var(--border);
+  margin: var(--space-md) 0;
+}
+
+/* ============================================
+   动画
+   ============================================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease forwards; }
+.fade-in-up { animation: fadeInUp 0.4s ease forwards; }
+
+/* ============================================
+   图片
+   ============================================ */
+.img-round {
+  border-radius: var(--radius-md);
+}
+
+.img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ============================================
+   加载
+   ============================================ */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.85);
+  z-index: 999;
+}

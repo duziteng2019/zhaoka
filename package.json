@@ -1,0 +1,16 @@
+{
+  "name": "zhaoka",
+  "version": "1.0.0",
+  "description": "证件照制作微信小程序 MVP,提供手机拍照、AI 自动裁剪、背景替换、标准证件照导出等功能。用户可以通过小程序快速制作符合规格要求的证件照。",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "weui-miniprogram": "^1.5.6"
+  }
+}
