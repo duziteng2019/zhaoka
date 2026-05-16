@@ -1,35 +1,59 @@
 <!-- pages/historyDetail/historyDetail.wxml -->
-<view class="page-container">
-  <view class="header text-center fade-in">
-    <view class="card-title text-xl">历史详情</view>
-    <view class="card-subtitle">查看和管理这条历史记录</view>
+<view class="detail-container page-container">
+
+  <!-- 页面头部 -->
+  <view class="page-header fade-in">
+    <view class="header-title">历史详情</view>
+    <button class="btn btn-ghost btn-small" bindtap="goBack">返回</button>
   </view>
 
-  <view class="preview-section">
+  <!-- 照片预览 -->
+  <view class="preview-section fade-in-up">
     <view class="preview-card">
-      <image src="{{currentHistory.previewUrl}}" class="preview-image" />
+      <image src="{{currentHistory.thumbUrl || currentHistory.previewUrl || ''}}" mode="aspectFit" wx:if="{{currentHistory.thumbUrl || currentHistory.previewUrl}}"></image>
+      <view class="preview-empty" wx:else>
+        <view class="css-icon detail-empty"></view>
+      </view>
     </view>
   </view>
 
-  <view class="card">
-    <view class="card-title">详细信息</view>
+  <!-- 信息卡片 -->
+  <view class="info-section fade-in-up">
     <view class="info-row">
-      <text class="info-label">规格：</text>
-      <text class="info-value">{{currentHistory.specName}}</text>
+      <text class="info-label">照片规格</text>
+      <text class="info-value">{{currentHistory.specName || currentHistory.spec?.name || '—'}}</text>
     </view>
+    <view class="info-divider"></view>
     <view class="info-row">
-      <text class="info-label">背景：</text>
-      <text class="info-value">{{currentHistory.bgColorName}}</text>
+      <text class="info-label">背景颜色</text>
+      <view class="info-value-row">
+        <view class="color-dot" style="background:{{currentHistory.bgColor || '#fff'}}"></view>
+        <text>{{currentHistory.bgColorName || '—'}}</text>
+      </view>
     </view>
+    <view class="info-divider"></view>
     <view class="info-row">
-      <text class="info-label">创建时间：</text>
-      <text class="info-value">{{currentHistory.createTime}}</text>
+      <text class="info-label">创建时间</text>
+      <text class="info-value">{{currentHistory.createTime || '—'}}</text>
+    </view>
+    <view class="info-divider"></view>
+    <view class="info-row">
+      <text class="info-label">下载类型</text>
+      <text class="info-value badge {{currentHistory.downloadType || 'free'}}">
+        {{currentHistory.downloadType === 'paid' ? '已购买' : '免费预览'}}
+      </text>
     </view>
   </view>
 
-  <view class="actions-section">
-    <button class="btn btn-success btn-block" bindtap="downloadHistory">下载图片</button>
-    <button class="btn btn-primary btn-block" bindtap="editHistory">重新编辑</button>
-    <button class="btn btn-danger btn-block" bindtap="deleteHistory">删除记录</button>
+  <!-- 操作 -->
+  <view class="actions-section fade-in-up">
+    <button class="btn btn-primary btn-block btn-large" bindtap="downloadHistory">
+      <view class="css-icon btn-download-icon"></view>
+      下载图片
+    </button>
+    <view class="action-row">
+      <button class="btn btn-ghost btn-flex" bindtap="editHistory">重新编辑</button>
+      <button class="btn btn-ghost btn-flex btn-danger-text" bindtap="deleteHistory">删除记录</button>
+    </view>
   </view>
 </view>

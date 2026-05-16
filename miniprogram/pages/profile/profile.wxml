@@ -2,86 +2,73 @@
 <view class="profile-container">
 
   <!-- 页面头部 -->
-  <view class="page-header">
-    <view class="section-title">个人中心</view>
+  <view class="page-header fade-in">
+    <view class="header-title">个人中心</view>
   </view>
 
-  <!-- 用户信息 -->
-  <view class="user-card">
-    <view class="user-header">
-      <view class="avatar-wrap">
-        <image src="{{userInfo.avatarUrl || '../../images/default-avatar.png'}}" mode="aspectFill"></image>
-      </view>
-      <view class="user-info">
-        <text class="user-name">{{userInfo.nickName || '未登录'}}</text>
-        <text class="user-id">{{userInfo.openid || ''}}</text>
+  <!-- 用户卡片 -->
+  <view class="user-card fade-in-up">
+    <view class="user-avatar">
+      <image src="{{userInfo.avatarUrl || ''}}" mode="aspectFill" wx:if="{{userInfo.avatarUrl}}"></image>
+      <view class="avatar-placeholder" wx:else>
+        <view class="css-icon avatar-person"></view>
       </view>
     </view>
-    <button wx:if="{{!userInfo.openid}}" class="btn btn-primary btn-block login-btn" bindtap="login">
-      微信登录
-    </button>
+    <view class="user-body">
+      <text class="user-name">{{userInfo.nickName || '未登录'}}</text>
+      <text class="user-desc">{{userInfo.openid ? '已微信授权' : '登录后可使用云端保存功能'}}</text>
+    </view>
+    <button wx:if="{{!userInfo.openid}}" class="btn btn-secondary btn-small" bindtap="login">微信登录</button>
   </view>
 
-  <!-- 统计信息 -->
-  <view class="stats-card">
-    <view class="card-title">使用统计</view>
-    <view class="stats-grid">
-      <view class="stat-item">
-        <text class="stat-value">{{totalHistory}}</text>
-        <text class="stat-label">制作次数</text>
+  <!-- 统计 -->
+  <view class="stats-section fade-in-up">
+    <view class="stat-item">
+      <view class="stat-icon-wrap blue">
+        <view class="css-icon stat-photo"></view>
       </view>
-      <view class="stat-item">
-        <text class="stat-value">{{totalDownloads}}</text>
-        <text class="stat-label">下载次数</text>
+      <text class="stat-value">{{totalHistory || 0}}</text>
+      <text class="stat-label">制作次数</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <view class="stat-icon-wrap green">
+        <view class="css-icon stat-download"></view>
       </view>
-      <view class="stat-item">
-        <text class="stat-value">{{totalOrders}}</text>
-        <text class="stat-label">付费次数</text>
+      <text class="stat-value">{{totalDownloads || 0}}</text>
+      <text class="stat-label">下载次数</text>
+    </view>
+    <view class="stat-divider"></view>
+    <view class="stat-item">
+      <view class="stat-icon-wrap orange">
+        <view class="css-icon stat-star"></view>
       </view>
+      <text class="stat-value">{{totalOrders || 0}}</text>
+      <text class="stat-label">付费次数</text>
     </view>
   </view>
 
-  <!-- 功能菜单 -->
-  <view class="menu-card">
+  <!-- 菜单 -->
+  <view class="menu-section fade-in-up">
     <view class="menu-item" bindtap="goToHistory">
-      <view class="menu-icon-box">
-        <mp-icon type="order" size="20" color="#2B6CB0"/>
-      </view>
+      <view class="menu-icon-wrap"><view class="css-icon menu-history"></view></view>
       <text class="menu-text">历史记录</text>
-      <text class="menu-arrow">></text>
-    </view>
-    <view class="menu-item" bindtap="goToSettings">
-      <view class="menu-icon-box">
-        <mp-icon type="setting" size="20" color="#2B6CB0"/>
-      </view>
-      <text class="menu-text">设置</text>
-      <text class="menu-arrow">></text>
-    </view>
-    <view class="menu-item" bindtap="goToAbout">
-      <view class="menu-icon-box">
-        <mp-icon type="info" size="20" color="#2B6CB0"/>
-      </view>
-      <text class="menu-text">关于我们</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-arrow">›</text>
     </view>
     <view class="menu-item" bindtap="goToPrivacy">
-      <view class="menu-icon-box">
-        <mp-icon type="lock" size="20" color="#2B6CB0"/>
-      </view>
+      <view class="menu-icon-wrap"><view class="css-icon menu-privacy"></view></view>
       <text class="menu-text">隐私政策</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-arrow">›</text>
     </view>
     <view class="menu-item" bindtap="goToFeedback">
-      <view class="menu-icon-box">
-        <mp-icon type="chat" size="20" color="#2B6CB0"/>
-      </view>
+      <view class="menu-icon-wrap"><view class="css-icon menu-feedback"></view></view>
       <text class="menu-text">意见反馈</text>
-      <text class="menu-arrow">></text>
+      <text class="menu-arrow">›</text>
     </view>
   </view>
 
-  <!-- 版本信息 -->
+  <!-- 版本 -->
   <view class="version-section">
-    <text class="version-text">版本号：{{version}}</text>
+    <text>版本 {{version || '1.0.0'}}</text>
   </view>
 </view>

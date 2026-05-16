@@ -21,13 +21,10 @@ Page({
   onLoad(options) {
     logger.info('PAGE', 'upload 页面加载');
 
-    // 检查是否已有选中的规格
+    // 检查是否已有选中的规格，没有则使用默认
     const selectedSpec = wx.getStorageSync('selectedSpec');
     if (!selectedSpec) {
-      // 如果没有选中的规格，跳转到规格选择页
-      wx.navigateTo({
-        url: '/pages/sizeSelect/sizeSelect'
-      });
+      wx.setStorageSync('selectedSpec', { id: 1, name: '一寸', size: '25×35mm' });
     }
   },
 

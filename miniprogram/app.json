@@ -2,7 +2,6 @@
   "pages": [
     "pages/home/home",
     "pages/upload/upload",
-    "pages/sizeSelect/sizeSelect",
     "pages/cropEdit/cropEdit",
     "pages/backgroundReplace/backgroundReplace",
     "pages/export/export",
@@ -14,7 +13,7 @@
   "window": {
     "backgroundTextStyle": "dark",
     "navigationBarBackgroundColor": "#2563EB",
-    "navigationBarTitleText": "证件照制作",
+    "navigationBarTitleText": "\u8bc1\u4ef6\u7167\u5236\u4f5c",
     "navigationBarTextStyle": "white"
   },
   "tabBar": {
@@ -25,19 +24,19 @@
     "list": [
       {
         "pagePath": "pages/home/home",
-        "text": "首页",
+        "text": "\u9996\u9875",
         "iconPath": "images/tabbar/home.png",
         "selectedIconPath": "images/tabbar/home-active.png"
       },
       {
         "pagePath": "pages/history/history",
-        "text": "历史",
+        "text": "\u5386\u53f2",
         "iconPath": "images/tabbar/history.png",
         "selectedIconPath": "images/tabbar/history-active.png"
       },
       {
         "pagePath": "pages/profile/profile",
-        "text": "我的",
+        "text": "\u6211\u7684",
         "iconPath": "images/tabbar/profile.png",
         "selectedIconPath": "images/tabbar/profile-active.png"
       }
@@ -45,4 +44,4 @@
   },
   "style": "v2",
   "sitemapLocation": "sitemap.json"
-} 
+}
