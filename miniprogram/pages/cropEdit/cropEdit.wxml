@@ -1,61 +1,81 @@
 <!--pages/cropEdit/cropEdit.wxml-->
 <view class="crop-container page-container">
+
   <!-- 页面头部 -->
   <view class="header fade-in">
     <view class="header-title">裁剪调整</view>
-    <view class="header-step">第 2 步</view>
+    <view class="header-step">第 2 步 / 共 4 步</view>
   </view>
 
   <!-- 预览区域 -->
   <view class="preview-section fade-in">
     <view class="preview-area">
       <image class="preview-image" src="{{tempFilePath}}" mode="aspectFit"></image>
-      <!-- 裁剪框 -->
-      <view class="crop-overlay">
-        <view class="crop-box">
-          <view class="crop-corner top-left"></view>
-          <view class="crop-corner top-right"></view>
-          <view class="crop-corner bottom-left"></view>
-          <view class="crop-corner bottom-right"></view>
-        </view>
+      <!-- 检测到人脸时显示人脸框 -->
+      <view class="face-overlay" wx:if="{{faceRect}}"
+        style="left:{{faceRect.x}}px; top:{{faceRect.y}}px; width:{{faceRect.width}}px; height:{{faceRect.height}}px;">
+        <view class="face-corner tl"></view>
+        <view class="face-corner tr"></view>
+        <view class="face-corner bl"></view>
+        <view class="face-corner br"></view>
       </view>
     </view>
-    <view class="preview-hint">拖动裁剪框调整人像位置</view>
+    <view class="preview-hint" wx:if="{{!faceRect && !detecting}}">系统将自动检测人像位置并进行裁剪</view>
+    <view class="preview-hint" wx:elif="{{detecting}}">🤖 正在检测人像...</view>
+    <view class="preview-hint" wx:elif="{{faceRect}}">✅ 已检测到人像，自动裁剪完成</view>
   </view>
 
-  <!-- 工具栏 -->
-  <view class="tools-section fade-in">
+  <!-- 自动裁剪按钮 -->
+  <view class="auto-section fade-in" wx:if="{{!faceRect && !detecting}}">
+    <button class="btn-auto" bindtap="autoCrop">
+      <view class="auto-icon-wrap">
+        <view class="css-icon target"></view>
+      </view>
+      <view class="auto-text">
+        <text class="auto-title">自动裁剪</text>
+        <text class="auto-desc">AI智能识别人像位置</text>
+      </view>
+    </button>
+  </view>
+
+  <!-- 手动微调提示 -->
+  <view class="tools-section fade-in" wx:if="{{faceRect}}">
+    <view class="section-title">裁剪区域</view>
     <view class="tools-grid">
-      <view class="tool-item {{currentTool === 'auto' ? 'active' : ''}}" bindtap="setTool" data-tool="auto">
-        <view class="tool-icon">🎯</view>
-        <view class="tool-text">自动</view>
+      <view class="tool-item active">
+        <view class="tool-icon-wrap">
+          <view class="css-icon crop"></view>
+        </view>
+        <view class="tool-text">自动裁剪</view>
       </view>
-      <view class="tool-item {{currentTool === 'rotate' ? 'active' : ''}}" bindtap="setTool" data-tool="rotate">
-        <view class="tool-icon">🔄</view>
-        <view class="tool-text">旋转</view>
+      <view class="tool-item" bindtap="resetCrop">
+        <view class="tool-icon-wrap">
+          <view class="css-icon refresh"></view>
+        </view>
+        <view class="tool-text">重新检测</view>
       </view>
-      <view class="tool-item {{currentTool === 'mirror' ? 'active' : ''}}" bindtap="setTool" data-tool="mirror">
-        <view class="tool-icon">↔️</view>
-        <view class="tool-text">镜像</view>
+    </view>
+
+    <!-- 偏移微调 -->
+    <view class="adjust-section">
+      <view class="adjust-row">
+        <text class="adjust-label">上移</text>
+        <slider min="-50" max="50" value="{{offsetY}}" bindchange="onOffsetY" block-size="16" activeColor="#2563EB"/>
+        <text class="adjust-value">{{offsetY > 0 ? '下' : '上'}}{{Math.abs(offsetY)}}</text>
       </view>
-      <view class="tool-item" bindtap="resetEdit">
-        <view class="tool-icon">🔄</view>
-        <view class="tool-text">重置</view>
+      <view class="adjust-row">
+        <text class="adjust-label">缩放</text>
+        <slider min="80" max="120" value="{{zoom}}" bindchange="onZoom" block-size="16" activeColor="#2563EB"/>
+        <text class="adjust-value">{{zoom}}%</text>
       </view>
     </view>
   </view>
 
-  <!-- 旋转控制 -->
-  <view class="rotate-section" wx:if="{{showRotateControl}}">
-    <view class="rotate-slider">
-      <slider min="-45" max="45" value="{{rotateAngle}}" bindchange="onRotateChange" block-size="20" activeColor="#2563EB" backgroundColor="#E5E7EB"/>
-    </view>
-    <view class="rotate-value">{{rotateAngle}}°</view>
-  </view>
-
-  <!-- 底部按钮 -->
+  <!-- 底部 -->
   <view class="bottom-action">
     <button class="btn btn-ghost" bindtap="goBack">上一步</button>
-    <button class="btn btn-primary" bindtap="goNext">确认裁剪</button>
+    <button class="btn btn-primary" bindtap="goNext" disabled="{{!faceRect && !autoCropped}}">
+      {{faceRect ? '下一步' : '请先裁剪'}}
+    </button>
   </view>
 </view>

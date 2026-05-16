@@ -1,7 +1,7 @@
 <!--pages/history/history.wxml-->
 <view class="history-container page-container">
   <!-- 页面头部 -->
-  <view class="header fade-in">
+  <view class="page-header fade-in">
     <view class="header-title">历史记录</view>
   </view>
 

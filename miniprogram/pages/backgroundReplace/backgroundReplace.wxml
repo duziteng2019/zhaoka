@@ -1,9 +1,9 @@
 <!--pages/backgroundReplace/backgroundReplace.wxml-->
 <view class="bg-container page-container">
   <!-- 页面头部 -->
-  <view class="header fade-in">
+  <view class="page-header fade-in">
     <view class="header-title">背景颜色</view>
-    <view class="header-step">第 3 步</view>
+    <view class="header-step">第 3 步 / 共 4 步</view>
   </view>
 
   <!-- AI模式标签 -->

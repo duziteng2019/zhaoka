@@ -1,96 +1,101 @@
 <!--pages/home/home.wxml-->
 <view class="home-container page-container">
 
-  <!-- 主功能入口 -->
-  <view class="hero-card fade-in">
+  <!-- Hero区域 - 渐变背景 -->
+  <view class="hero-section">
     <view class="hero-content">
-      <view class="hero-badge">✨ AI智能制作</view>
-      <view class="hero-title">三步完成专业证件照</view>
+      <view class="hero-badge">🤖 AI智能制作</view>
+      <view class="hero-title">三步完成<br/>专业证件照</view>
       <view class="hero-steps">
-        <view class="step-item">
-          <view class="step-num">1</view>
-          <view class="step-text">选择规格</view>
-        </view>
-        <view class="step-arrow">→</view>
-        <view class="step-item">
-          <view class="step-num">2</view>
-          <view class="step-text">上传照片</view>
-        </view>
-        <view class="step-arrow">→</view>
-        <view class="step-item">
-          <view class="step-num">3</view>
-          <view class="step-text">导出下载</view>
-        </view>
+        <view class="step-dot active"></view>
+        <view class="step-line"></view>
+        <view class="step-dot"></view>
+        <view class="step-line"></view>
+        <view class="step-dot"></view>
       </view>
+      <view class="step-labels">
+        <text>选规格</text>
+        <text>上传照</text>
+        <text>导出</text>
+      </view>
+      <button class="btn-hero" bindtap="startCreate">
+        <text>立即制作</text>
+        <view class="btn-arrow">→</view>
+      </button>
     </view>
-    <button class="btn btn-primary btn-large btn-block" bindtap="startCreate">
-      立即制作
-    </button>
+    <!-- 装饰圆 -->
+    <view class="hero-circle c1"></view>
+    <view class="hero-circle c2"></view>
+    <view class="hero-circle c3"></view>
   </view>
 
   <!-- 常用规格 -->
-  <view class="specs-section fade-in">
+  <view class="specs-section">
     <view class="section-header">
       <view class="section-title">常用规格</view>
+      <text class="section-count" wx:if="{{!loadingSpecs}}">{{specs.length}}种</text>
     </view>
-    <view class="specs-grid">
-      <view class="spec-card" bindtap="selectSpec" data-spec="1">
-        <view class="spec-icon primary">1</view>
-        <view class="spec-info">
-          <text class="spec-name">一寸</text>
-          <text class="spec-desc">25×35mm</text>
+
+    <!-- 骨架屏 -->
+    <view class="specs-grid" wx:if="{{loadingSpecs}}">
+      <view class="spec-card skeleton" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+        <view class="skeleton-icon"></view>
+        <view class="skeleton-text">
+          <view class="skeleton-line w-60"></view>
+          <view class="skeleton-line w-40"></view>
         </view>
       </view>
-      <view class="spec-card" bindtap="selectSpec" data-spec="2">
-        <view class="spec-icon secondary">2</view>
+    </view>
+
+    <!-- 规格列表 -->
+    <view class="specs-grid" wx:else>
+      <view class="spec-card" wx:for="{{specs}}" wx:key="id" bindtap="selectSpec" data-spec="{{item.id}}">
+        <view class="spec-icon {{'color-' + (index % 4)}}">{{item.name.slice(0,1)}}</view>
         <view class="spec-info">
-          <text class="spec-name">二寸</text>
-          <text class="spec-desc">35×49mm</text>
-        </view>
-      </view>
-      <view class="spec-card" bindtap="selectSpec" data-spec="3">
-        <view class="spec-icon accent">护</view>
-        <view class="spec-info">
-          <text class="spec-name">护照</text>
-          <text class="spec-desc">33×48mm</text>
-        </view>
-      </view>
-      <view class="spec-card" bindtap="selectSpec" data-spec="4">
-        <view class="spec-icon success">签</view>
-        <view class="spec-info">
-          <text class="spec-name">签证</text>
-          <text class="spec-desc">35×45mm</text>
+          <text class="spec-name">{{item.name}}</text>
+          <text class="spec-desc">{{item.size || item.desc || ''}}</text>
         </view>
       </view>
     </view>
   </view>
 
-  <!-- 功能说明 -->
-  <view class="features-section fade-in">
+  <!-- 服务特色 -->
+  <view class="features-section">
     <view class="section-header">
       <view class="section-title">服务特色</view>
     </view>
     <view class="features-grid">
       <view class="feature-item">
-        <view class="feature-icon">🎯</view>
+        <view class="feature-icon-wrap primary">
+          <view class="css-icon person"></view>
+        </view>
         <view class="feature-title">智能抠图</view>
         <view class="feature-desc">AI精准识别人像</view>
       </view>
       <view class="feature-item">
-        <view class="feature-icon">🎨</view>
+        <view class="feature-icon-wrap accent">
+          <view class="css-icon palette"></view>
+        </view>
         <view class="feature-title">多色背景</view>
-        <view class="feature-desc">白/蓝/红背景可选</view>
+        <view class="feature-desc">白/蓝/红自由切换</view>
       </view>
       <view class="feature-item">
-        <view class="feature-icon">📱</view>
+        <view class="feature-icon-wrap success">
+          <view class="css-icon download"></view>
+        </view>
         <view class="feature-title">高清导出</view>
-        <view class="feature-desc">多种分辨率支持</view>
+        <view class="feature-desc">支持冲印级分辨率</view>
       </view>
       <view class="feature-item">
-        <view class="feature-icon">📁</view>
+        <view class="feature-icon-wrap warning">
+          <view class="css-icon clock"></view>
+        </view>
         <view class="feature-title">历史记录</view>
         <view class="feature-desc">随时查看和下载</view>
       </view>
     </view>
   </view>
+
+  <!-- 底部留白 -->
+  <view class="bottom-spacer"></view>
 </view>

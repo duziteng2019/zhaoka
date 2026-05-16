@@ -1,7 +1,7 @@
-/* export.wxss - 导出页 | 简约风格 */
+/* export.wxss - 导出页 | 付费卡片差异化 */
 
 page {
-  background: var(--bg-page);
+  background: #F5F7FA;
   min-height: 100vh;
 }
 
@@ -10,40 +10,15 @@ page {
   padding-bottom: 180rpx;
 }
 
-/* ============================================
-   页面头部
-   ============================================ */
-.header {
-  padding: var(--space-lg) var(--space-md) var(--space-md);
-  background: var(--bg-card);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.header-title {
-  font-size: var(--text-xl);
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.header-step {
-  font-size: var(--text-sm);
-  color: var(--success);
-  background: rgba(16, 185, 129, 0.08);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-full);
-}
-
-/* ============================================
+/* ═══════════════════════════════════════
    预览卡片
-   ============================================ */
+   ═══════════════════════════════════════ */
 .preview-card {
-  margin: var(--space-md);
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
+  margin: 0 32rpx 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
   overflow: hidden;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.06);
 }
 
 .preview-area {
@@ -62,166 +37,239 @@ page {
 }
 
 .preview-info {
-  padding: var(--space-md);
+  padding: 20rpx 24rpx;
   display: flex;
-  gap: var(--space-lg);
+  gap: 0;
 }
 
 .info-item {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 4rpx;
 }
 
+.info-divider {
+  width: 1rpx;
+  background: #E5E7EB;
+  margin: 0 24rpx;
+}
+
 .info-label {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
+  font-size: 22rpx;
+  color: #9CA3AF;
 }
 
 .info-value {
-  font-size: var(--text-sm);
-  color: var(--text-primary);
-  font-weight: 500;
-}
-
-/* ============================================
-   下载选项
-   ============================================ */
-.download-section {
-  padding: 0 var(--space-md);
-  margin-bottom: var(--space-lg);
-}
-
-.section-title {
-  font-size: var(--text-base);
+  font-size: 26rpx;
+  color: #1F2937;
   font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-md);
 }
 
-.download-options {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-md);
+/* ═══════════════════════════════════════
+   下载选项
+   ═══════════════════════════════════════ */
+.download-section {
+  padding: 0 32rpx;
+  margin-bottom: 24rpx;
 }
 
-.option-item {
-  background: var(--bg-card);
-  border-radius: var(--radius-md);
-  padding: var(--space-md);
+.section-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1F2937;
+  margin-bottom: 16rpx;
+}
+
+.option-card {
+  position: relative;
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 28rpx 24rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: var(--shadow-sm);
-  border: 4rpx solid transparent;
-  transition: all 0.2s ease;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+  border: 2rpx solid transparent;
+  transition: all 0.2s;
+  margin-bottom: 16rpx;
 }
 
-.option-item:active {
-  transform: scale(0.99);
+.option-card:active { transform: scale(0.98); }
+
+/* 免费卡 */
+.option-free.active {
+  border-color: #9CA3AF;
+  background: rgba(156,163,175,0.03);
 }
 
-.option-item.active {
-  border-color: var(--primary);
-  background: rgba(37, 99, 235, 0.02);
+/* 高清卡（突出） */
+.option-hd {
+  border: 2rpx solid #E5E7EB;
+}
+.option-hd.active {
+  border-color: #2563EB;
+  background: rgba(37,99,235,0.03);
+  box-shadow: 0 4rpx 16rpx rgba(37,99,235,0.1);
 }
 
-.option-content {
+.hd-tag {
+  position: absolute;
+  top: -12rpx; right: 24rpx;
+  background: linear-gradient(135deg, #F59E0B, #F97316);
+  color: #fff;
+  font-size: 20rpx;
+  font-weight: 600;
+  padding: 4rpx 16rpx;
+  border-radius: 999px;
+}
+
+.option-left {
   display: flex;
   align-items: center;
-  gap: var(--space-md);
+  gap: 20rpx;
+  flex: 1;
 }
 
-.option-icon {
-  font-size: 48rpx;
+.option-badge-free {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #10B981;
+  background: rgba(16,185,129,0.1);
+  padding: 4rpx 14rpx;
+  border-radius: 8rpx;
+  flex-shrink: 0;
 }
 
-.option-info {
+.option-icon-hd {
+  width: 56rpx; height: 56rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #2563EB, #3B82F6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4rpx 12rpx rgba(37,99,235,0.3);
+}
+
+.option-body {
   display: flex;
   flex-direction: column;
   gap: 4rpx;
 }
 
 .option-title {
-  font-size: var(--text-base);
+  font-size: 28rpx;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #1F2937;
 }
 
 .option-desc {
-  font-size: var(--text-xs);
-  color: var(--text-muted);
+  font-size: 22rpx;
+  color: #9CA3AF;
 }
 
-.option-badge {
-  font-size: var(--text-xs);
-  color: var(--success);
-  background: rgba(16, 185, 129, 0.1);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--radius-full);
-  font-weight: 500;
+.option-price-tag {
+  font-size: 34rpx;
+  font-weight: 800;
+  color: #2563EB;
+  margin-right: 16rpx;
 }
 
-.option-price {
-  font-size: var(--text-lg);
-  font-weight: 700;
-  color: var(--primary);
-}
-
-/* ============================================
-   注意事项
-   ============================================ */
-.notice-section {
-  margin: 0 var(--space-md);
-  padding: var(--space-md);
-  background: rgba(37, 99, 235, 0.04);
-  border-radius: var(--radius-md);
+/* 选择圈 */
+.option-check {
+  width: 32rpx; height: 32rpx;
+  border-radius: 50%;
+  border: 3rpx solid #D1D5DB;
   display: flex;
-  gap: var(--space-sm);
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.option-check.checked {
+  border-color: #2563EB;
+  background: #2563EB;
+}
+.check-dot {
+  width: 10rpx; height: 10rpx;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.option-check.checked .check-dot { opacity: 1; }
+
+/* ═══════════════════════════════════════
+   注意事项
+   ═══════════════════════════════════════ */
+.notice-section {
+  margin: 0 32rpx;
+  padding: 20rpx;
+  background: #FEF3C7;
+  border-radius: 12rpx;
+  display: flex;
+  gap: 12rpx;
 }
 
 .notice-icon {
-  font-size: 32rpx;
+  width: 32rpx; height: 32rpx;
+  border-radius: 50%;
+  background: #F59E0B;
+  color: #fff;
+  font-size: 20rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
+  margin-top: 2rpx;
 }
 
 .notice-text {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  font-size: var(--text-xs);
-  color: var(--text-secondary);
-  line-height: 1.6;
+  font-size: 22rpx;
+  color: #92400E;
+  line-height: 1.7;
 }
 
-/* ============================================
+/* ═══════════════════════════════════════
+   CSS图标
+   ═══════════════════════════════════════ */
+.css-icon.hd-star {
+  width: 0; height: 0;
+  border-left: 12rpx solid transparent;
+  border-right: 12rpx solid transparent;
+  border-bottom: 22rpx solid #fff;
+  position: relative;
+}
+.css-icon.hd-star::after {
+  content: '';
+  position: absolute;
+  top: 6rpx; left: -12rpx;
+  width: 0; height: 0;
+  border-left: 12rpx solid transparent;
+  border-right: 12rpx solid transparent;
+  border-top: 22rpx solid #fff;
+}
+
+/* ═══════════════════════════════════════
    底部按钮
-   ============================================ */
+   ═══════════════════════════════════════ */
 .bottom-action {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: var(--space-md);
-  background: var(--bg-card);
-  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.06);
+  bottom: 0; left: 0; right: 0;
+  padding: 24rpx 32rpx;
+  background: #fff;
+  box-shadow: 0 -4rpx 16rpx rgba(0,0,0,0.06);
   display: flex;
-  gap: var(--space-md);
+  gap: 20rpx;
 }
+.bottom-action .btn { flex: 1; margin: 0; }
 
-.bottom-action .btn {
-  flex: 1;
-  margin: 0;
-}
-
-/* ============================================
-   动画
-   ============================================ */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20rpx); }
+/* 动画覆盖 */
+.fade-in { animation: fadeIn 0.4s ease forwards; }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30rpx); }
   to { opacity: 1; transform: translateY(0); }
 }
-
-.fade-in {
-  animation: fadeIn 0.4s ease forwards;
-}
+.fade-in-up { animation: fadeInUp 0.5s ease forwards; }

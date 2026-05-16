@@ -1,9 +1,9 @@
 <!--pages/upload/upload.wxml-->
 <view class="upload-container page-container">
   <!-- 页面头部 -->
-  <view class="header fade-in">
+  <view class="page-header fade-in">
     <view class="header-title">上传照片</view>
-    <view class="header-step">第 1 步</view>
+    <view class="header-step">第 1 步 / 共 4 步</view>
   </view>
 
   <!-- 上传区域 -->
