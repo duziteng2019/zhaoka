@@ -1,54 +1,149 @@
-/* pages/historyDetail/historyDetail.wxss */
-/* Uses CSS variables and utility classes from app.wxss */
+/* historyDetail.wxss - 历史详情 | 统一风格 */
 
-.preview-section {
-  display: flex;
-  justify-content: center;
-  margin: var(--space-md) 0;
+page {
+  background: #F5F7FA;
+  min-height: 100vh;
 }
 
+.detail-container {
+  min-height: 100vh;
+  padding-bottom: 60rpx;
+}
+
+/* ═══════════════════════════════════════
+   页面头部
+   ═══════════════════════════════════════ */
+.page-header {
+  padding: 32rpx 32rpx 20rpx;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.header-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1F2937;
+}
+
+/* ═══════════════════════════════════════
+   预览
+   ═══════════════════════════════════════ */
+.preview-section {
+  padding: 0 32rpx;
+  margin-bottom: 20rpx;
+}
 .preview-card {
   width: 100%;
-  height: 600rpx;
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-md);
+  aspect-ratio: 3/4;
+  background: #E5E7EB;
+  border-radius: 16rpx;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0,0,0,0.06);
 }
-
-.preview-image {
+.preview-card image {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
+.preview-empty {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ═══════════════════════════════════════
+   信息卡片
+   ═══════════════════════════════════════ */
+.info-section {
+  margin: 0 32rpx 24rpx;
+  padding: 24rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04);
+}
 
 .info-row {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: var(--space-sm) 0;
-  gap: var(--space-md);
+  padding: 12rpx 0;
 }
+.info-label { font-size: 24rpx; color: #9CA3AF; }
+.info-value { font-size: 26rpx; color: #1F2937; font-weight: 500; }
+.info-value-row { display: flex; align-items: center; gap: 8rpx; font-size: 26rpx; color: #1F2937; }
+.info-divider { height: 1rpx; background: #F3F4F6; }
 
-.info-label {
-  font-size: var(--text-base);
-  color: var(--text-secondary);
-  min-width: 140rpx;
+.color-dot {
+  width: 20rpx; height: 20rpx;
+  border-radius: 4rpx;
+  border: 1rpx solid #E5E7EB;
   flex-shrink: 0;
 }
 
-.info-value {
-  font-size: var(--text-base);
-  color: var(--text-primary);
+.info-value.badge {
+  font-size: 22rpx;
+  padding: 4rpx 14rpx;
+  border-radius: 999px;
   font-weight: 500;
-  flex: 1;
+}
+.info-value.badge.free { color: #6B7280; background: #F3F4F6; }
+.info-value.badge.paid { color: #10B981; background: rgba(16,185,129,0.1); }
+
+/* ═══════════════════════════════════════
+   操作
+   ═══════════════════════════════════════ */
+.actions-section {
+  padding: 0 32rpx;
 }
 
-.actions-section {
+.action-row {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-sm);
-  margin-top: var(--space-lg);
+  gap: 16rpx;
+  margin-top: 16rpx;
 }
+.btn-flex { flex: 1; margin: 0; }
+
+.btn-danger-text { color: #EF4444; }
+.btn-danger-text:active { background: rgba(239,68,68,0.08); }
+
+/* 下载按钮图标 */
+.btn-download-icon {
+  display: inline-block;
+  width: 0; height: 0;
+  border-left: 8rpx solid transparent;
+  border-right: 8rpx solid transparent;
+  border-top: 12rpx solid #fff;
+  margin-right: 8rpx;
+  vertical-align: middle;
+}
+
+/* 空状态 */
+.css-icon.detail-empty {
+  width: 60rpx; height: 60rpx;
+  border: 4rpx solid #D1D5DB;
+  border-radius: 12rpx;
+  opacity: 0.5;
+}
+.css-icon.detail-empty::before {
+  content: '?';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 40rpx;
+  color: #D1D5DB;
+  font-weight: 700;
+}
+
+/* ═══════════════════════════════════════
+   动画
+   ═══════════════════════════════════════ */
+@keyframes fadeIn { from { opacity:0; transform:translateY(20rpx); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeInUp { from { opacity:0; transform:translateY(30rpx); } to { opacity:1; transform:translateY(0); } }
+.fade-in { animation: fadeIn 0.4s ease forwards; }
+.fade-in-up { animation: fadeInUp 0.5s ease forwards; }
