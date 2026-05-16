@@ -1,5 +1,6 @@
 <!--pages/upload/upload.wxml-->
 <view class="upload-container page-container">
+
   <!-- 页面头部 -->
   <view class="page-header fade-in">
     <view class="header-title">上传照片</view>
@@ -7,56 +8,83 @@
   </view>
 
   <!-- 上传区域 -->
-  <view class="upload-section fade-in">
+  <view class="upload-section fade-in-up">
     <view class="upload-area" bindtap="chooseImage">
+      <!-- 未上传 -->
       <view class="upload-placeholder" wx:if="{{!tempFilePath}}">
-        <view class="upload-icon">📷</view>
-        <view class="upload-text">点击上传照片</view>
-        <view class="upload-hint">支持 JPG、PNG 格式</view>
+        <view class="upload-icon-wrap">
+          <view class="css-icon upload-arrow"></view>
+          <view class="css-icon upload-line"></view>
+        </view>
+        <view class="upload-title">点击上传照片</view>
+        <view class="upload-hint">支持 JPG / PNG 格式</view>
       </view>
-      <image wx:else class="preview-image" src="{{tempFilePath}}" mode="aspectFit"></image>
-      <view class="upload-mask" wx:if="{{tempFilePath}}">
-        <view class="mask-btn">重新选择</view>
-      </view>
-    </view>
-  </view>
-
-  <!-- 上传方式 -->
-  <view class="actions-section fade-in">
-    <view class="action-buttons">
-      <view class="action-btn" bindtap="chooseImage">
-        <view class="action-icon">🖼️</view>
-        <view class="action-text">相册选择</view>
-      </view>
-      <view class="action-btn" bindtap="takePhoto">
-        <view class="action-icon">📸</view>
-        <view class="action-text">拍照上传</view>
+      <!-- 已上传 -->
+      <view class="upload-preview" wx:else>
+        <image class="preview-image" src="{{tempFilePath}}" mode="aspectFit"></image>
+        <view class="upload-overlay">
+          <text>重新选择</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <!-- 拍摄建议 -->
-  <view class="tips-section fade-in">
+  <!-- 操作按钮 -->
+  <view class="actions-section fade-in-up">
+    <view class="action-grid">
+      <view class="action-card" bindtap="chooseImage">
+        <view class="action-icon-wrap">
+          <view class="css-icon photo-library"></view>
+        </view>
+        <text class="action-text">相册选择</text>
+      </view>
+      <view class="action-card" bindtap="takePhoto">
+        <view class="action-icon-wrap">
+          <view class="css-icon camera"></view>
+        </view>
+        <text class="action-text">拍照上传</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 拍摄指南 -->
+  <view class="tips-section fade-in-up">
     <view class="tips-header">
-      <view class="tips-title">📌 拍摄建议</view>
+      <view class="css-icon tip-lightbulb"></view>
+      <text>拍摄建议</text>
     </view>
     <view class="tips-grid">
       <view class="tip-item">
-        <view class="tip-icon">💡</view>
-        <view class="tip-text">光线充足</view>
+        <view class="tip-icon-wrap">
+          <view class="css-icon tip-sun"></view>
+        </view>
+        <view class="tip-body">
+          <text class="tip-title">光线充足</text>
+          <text class="tip-desc">自然光下拍摄效果最佳</text>
+        </view>
       </view>
       <view class="tip-item">
-        <view class="tip-icon">👤</view>
-        <view class="tip-text">正面直视</view>
+        <view class="tip-icon-wrap">
+          <view class="css-icon tip-face"></view>
+        </view>
+        <view class="tip-body">
+          <text class="tip-title">正面直视</text>
+          <text class="tip-desc">头部端正，平视镜头</text>
+        </view>
       </view>
       <view class="tip-item">
-        <view class="tip-icon">🎨</view>
-        <view class="tip-text">背景简洁</view>
+        <view class="tip-icon-wrap">
+          <view class="css-icon tip-bg"></view>
+        </view>
+        <view class="tip-body">
+          <text class="tip-title">背景简洁</text>
+          <text class="tip-desc">白色或纯色背景更易处理</text>
+        </view>
       </view>
     </view>
   </view>
 
-  <!-- 底部按钮 -->
+  <!-- 底部 -->
   <view class="bottom-action">
     <button class="btn btn-primary btn-large btn-block" bindtap="goNext" disabled="{{!tempFilePath}}">
       下一步

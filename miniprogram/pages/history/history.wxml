@@ -1,31 +1,68 @@
 <!--pages/history/history.wxml-->
 <view class="history-container page-container">
+
   <!-- 页面头部 -->
   <view class="page-header fade-in">
     <view class="header-title">历史记录</view>
+    <text class="header-count" wx:if="{{historyList.length > 0}}">{{historyList.length}}条</text>
   </view>
 
-  <!-- 历史列表 -->
-  <view class="history-list" wx:if="{{historyList.length > 0}}">
-    <view class="history-item fade-in" wx:for="{{historyList}}" wx:key="id" bindtap="viewDetail" data-id="{{item.id}}">
-      <view class="item-thumb">
-        <image src="{{item.thumbUrl}}" mode="aspectFill"></image>
-      </view>
-      <view class="item-info">
-        <view class="item-title">{{item.specName}}</view>
-        <view class="item-meta">
-          <text class="meta-date">{{item.createTime}}</text>
-          <text class="meta-status {{item.status}}">{{item.statusText}}</text>
+  <!-- 瀑布流卡片 -->
+  <view class="waterfall" wx:if="{{historyList.length > 0}}">
+    <view class="waterfall-col">
+      <view wx:for="{{leftCol}}" wx:key="id" class="history-card fade-in-up" data-id="{{item.id}}" bindtap="viewDetail"
+        style="animation-delay:{{index * 0.06}}s">
+        <view class="card-thumb">
+          <image src="{{item.thumbUrl || item.finalFileID}}" mode="aspectFill"></image>
+          <view class="card-badge {{item.downloadType || 'free'}}">
+            {{item.downloadType === 'paid' ? '已购' : '免费'}}
+          </view>
+        </view>
+        <view class="card-body">
+          <text class="card-spec">{{item.specName || '证件照'}}</text>
+          <view class="card-meta">
+            <view class="meta-color" style="background:{{item.bgColor || '#fff'}}"></view>
+            <text class="meta-date">{{item.createTime || ''}}</text>
+          </view>
         </view>
       </view>
-      <view class="item-arrow">›</view>
     </view>
+    <view class="waterfall-col">
+      <view wx:for="{{rightCol}}" wx:key="id" class="history-card fade-in-up" data-id="{{item.id}}" bindtap="viewDetail"
+        style="animation-delay:{{index * 0.06 + 0.03}}s">
+        <view class="card-thumb">
+          <image src="{{item.thumbUrl || item.finalFileID}}" mode="aspectFill"></image>
+          <view class="card-badge {{item.downloadType || 'free'}}">
+            {{item.downloadType === 'paid' ? '已购' : '免费'}}
+          </view>
+        </view>
+        <view class="card-body">
+          <text class="card-spec">{{item.specName || '证件照'}}</text>
+          <view class="card-meta">
+            <view class="meta-color" style="background:{{item.bgColor || '#fff'}}"></view>
+            <text class="meta-date">{{item.createTime || ''}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部加载 -->
+  <view class="load-more" wx:if="{{loading}}">
+    <view class="load-spin"></view>
+    <text>加载中...</text>
+  </view>
+  <view class="load-more" wx:elif="{{!hasMore && historyList.length > 0}}">
+    <text class="load-end">— 已显示全部记录 —</text>
   </view>
 
   <!-- 空状态 -->
   <view class="empty-state" wx:else>
-    <view class="empty-icon">📁</view>
-    <view class="empty-text">暂无历史记录</view>
+    <view class="empty-illustration">
+      <view class="css-icon empty-box"></view>
+      <view class="css-icon empty-question"></view>
+    </view>
+    <view class="empty-text">还没有制作过证件照</view>
     <view class="empty-hint">完成制作后将在此显示</view>
     <button class="btn btn-primary" bindtap="goHome">开始制作</button>
   </view>
