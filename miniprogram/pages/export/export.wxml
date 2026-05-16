@@ -55,7 +55,7 @@
           <text class="option-desc">无水印，高分辨率，支持冲印</text>
         </view>
       </view>
-      <view class="option-price-tag">¥9.9</view>
+      <view class="option-price-tag">¥{{hdPrice}}</view>
       <view class="option-check {{selectedOption === 'hd' ? 'checked' : ''}}">
         <view class="check-dot"></view>
       </view>
@@ -76,7 +76,7 @@
   <view class="bottom-action">
     <button class="btn btn-ghost" bindtap="goHome">返回首页</button>
     <button class="btn btn-primary btn-large btn-block" bindtap="download" wx:if="{{selectedOption === 'hd'}}">
-      立即支付 ¥9.9
+      立即支付 ¥{{hdPrice}}
     </button>
     <button class="btn btn-secondary btn-large btn-block" bindtap="download" wx:else>
       免费下载

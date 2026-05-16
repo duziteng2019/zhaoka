@@ -15,6 +15,117 @@ page {
 }
 
 /* ═══════════════════════════════════════
+   结果视图
+   ═══════════════════════════════════════ */
+.result-section {
+  padding: 32rpx;
+}
+
+.result-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24rpx;
+}
+.result-title {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #1F2937;
+}
+.result-actions {
+  display: flex;
+  gap: 12rpx;
+}
+.result-action {
+  font-size: 24rpx;
+  color: #2563EB;
+  padding: 6rpx 16rpx;
+  border: 2rpx solid #2563EB;
+  border-radius: 999px;
+}
+.result-action:active { background: rgba(37,99,235,0.05); }
+
+/* 处理中动画 */
+.result-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  padding: 120rpx 0;
+}
+.load-spinner {
+  width: 64rpx; height: 64rpx;
+  border: 6rpx solid #E5E7EB;
+  border-top-color: #2563EB;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+.result-loading text {
+  font-size: 26rpx;
+  color: #6B7280;
+}
+
+/* 结果预览 */
+.result-preview {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: #E5E7EB;
+  border-radius: 16rpx;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+.result-image {
+  width: 100%; height: 100%;
+  object-fit: contain;
+}
+.result-badge {
+  position: absolute;
+  bottom: 16rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20rpx;
+  color: #fff;
+  background: rgba(0,0,0,0.5);
+  padding: 4rpx 16rpx;
+  border-radius: 999px;
+}
+
+/* 颜色选择 */
+.result-colors {
+  display: flex;
+  gap: 16rpx;
+  justify-content: center;
+  margin-bottom: 24rpx;
+}
+.color-swatch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 24rpx;
+  border-radius: 12rpx;
+  border: 2rpx solid transparent;
+}
+.color-swatch.active { border-color: #2563EB; background: rgba(37,99,235,0.04); }
+.swatch {
+  width: 48rpx; height: 48rpx;
+  border-radius: 50%;
+  border: 2rpx solid #E5E7EB;
+}
+.swatch.white { background: #fff; }
+.swatch.blue { background: #4A90E2; }
+.swatch.red { background: #E74C3C; }
+.color-swatch text { font-size: 22rpx; color: #6B7280; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ═══════════════════════════════════════
    Hero 渐变区
    ═══════════════════════════════════════ */
 .hero-section {

@@ -1,12 +1,8 @@
 {
   "pages": [
     "pages/home/home",
-    "pages/upload/upload",
-    "pages/cropEdit/cropEdit",
-    "pages/backgroundReplace/backgroundReplace",
     "pages/export/export",
     "pages/history/history",
-    "pages/historyDetail/historyDetail",
     "pages/profile/profile",
     "pages/privacy/privacy"
   ],

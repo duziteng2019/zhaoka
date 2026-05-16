@@ -34,7 +34,7 @@ exports.main = async (event, context) => {
         _openid: OPENID,
         orderNo,
         productName: '高清证件照下载',
-        amount: 199,
+        amount: 490,
         status: 'pending',
         specId: params.specId || '',
         imageId: params.imageId || '',
@@ -44,7 +44,7 @@ exports.main = async (event, context) => {
       const result = await db.collection('orders').add({ data: orderData })
       return {
         code: 0,
-        data: { orderId: result._id, orderNo, amount: 199 },
+        data: { orderId: result._id, orderNo, amount: 490 },
         message: '订单创建成功'
       }
     }
@@ -61,7 +61,7 @@ exports.main = async (event, context) => {
         apiParams: {
           out_trade_no: orderNo,
           body: '高清证件照下载',
-          total_fee: 199,
+          total_fee: 490,
           spbill_create_ip: '127.0.0.1',
           trade_type: 'JSAPI',
           openid: OPENID

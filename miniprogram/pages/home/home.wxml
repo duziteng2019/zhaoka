@@ -1,101 +1,124 @@
 <!--pages/home/home.wxml-->
 <view class="home-container page-container">
 
-  <!-- Hero区域 - 渐变背景 -->
-  <view class="hero-section">
-    <view class="hero-content">
-      <view class="hero-badge">🤖 AI智能制作</view>
-      <view class="hero-title">三步完成<br/>专业证件照</view>
-      <view class="hero-steps">
-        <view class="step-dot active"></view>
-        <view class="step-line"></view>
-        <view class="step-dot"></view>
-        <view class="step-line"></view>
-        <view class="step-dot"></view>
+  <!-- wx:if="select" 选规格视图 -->
+  <block wx:if="{{view === 'select'}}">
+    <!-- Hero -->
+    <view class="hero-section">
+      <view class="hero-content">
+        <view class="hero-badge">📸 一键制作</view>
+        <view class="hero-title">选规格·传照片<br/>自动出片</view>
+        <view class="hero-steps">
+          <view class="step-dot active"></view>
+          <view class="step-line"></view>
+          <view class="step-dot"></view>
+          <view class="step-line"></view>
+          <view class="step-dot"></view>
+        </view>
+        <view class="step-labels"><text>选规格</text><text>自动处理</text><text>下载</text></view>
+        <button class="btn-hero" bindtap="startCreate">
+          <text>快速制作</text>
+          <view class="btn-arrow">→</view>
+        </button>
       </view>
-      <view class="step-labels">
-        <text>选规格</text>
-        <text>上传照</text>
-        <text>导出</text>
-      </view>
-      <button class="btn-hero" bindtap="startCreate">
-        <text>立即制作</text>
-        <view class="btn-arrow">→</view>
-      </button>
-    </view>
-    <!-- 装饰圆 -->
-    <view class="hero-circle c1"></view>
-    <view class="hero-circle c2"></view>
-    <view class="hero-circle c3"></view>
-  </view>
-
-  <!-- 常用规格 -->
-  <view class="specs-section">
-    <view class="section-header">
-      <view class="section-title">常用规格</view>
-      <text class="section-count" wx:if="{{!loadingSpecs}}">{{specs.length}}种</text>
+      <view class="hero-circle c1"></view>
+      <view class="hero-circle c2"></view>
     </view>
 
-    <!-- 骨架屏 -->
-    <view class="specs-grid" wx:if="{{loadingSpecs}}">
-      <view class="spec-card skeleton" wx:for="{{[1,2,3,4]}}" wx:key="*this">
-        <view class="skeleton-icon"></view>
-        <view class="skeleton-text">
-          <view class="skeleton-line w-60"></view>
-          <view class="skeleton-line w-40"></view>
+    <!-- 规格 -->
+    <view class="specs-section">
+      <view class="section-header">
+        <view class="section-title">选择规格</view>
+        <text class="section-count" wx:if="{{!loadingSpecs}}">{{specs.length}}种</text>
+      </view>
+      <view class="specs-grid" wx:if="{{loadingSpecs}}">
+        <view class="spec-card skeleton" wx:for="{{[1,2,3,4]}}" wx:key="*this">
+          <view class="skeleton-icon"></view>
+          <view class="skeleton-text"><view class="skeleton-line w-60"></view><view class="skeleton-line w-40"></view></view>
+        </view>
+      </view>
+      <view class="specs-grid" wx:else>
+        <view class="spec-card" wx:for="{{specs}}" wx:key="id" bindtap="selectSpec" data-spec="{{item.id}}">
+          <view class="spec-icon {{'color-' + (index % 4)}}">{{item.name.slice(0,1)}}</view>
+          <view class="spec-info">
+            <text class="spec-name">{{item.name}}</text>
+            <text class="spec-desc">{{item.size || ''}}</text>
+          </view>
         </view>
       </view>
     </view>
 
-    <!-- 规格列表 -->
-    <view class="specs-grid" wx:else>
-      <view class="spec-card" wx:for="{{specs}}" wx:key="id" bindtap="selectSpec" data-spec="{{item.id}}">
-        <view class="spec-icon {{'color-' + (index % 4)}}">{{item.name.slice(0,1)}}</view>
-        <view class="spec-info">
-          <text class="spec-name">{{item.name}}</text>
-          <text class="spec-desc">{{item.size || item.desc || ''}}</text>
+    <!-- 特色 -->
+    <view class="features-section">
+      <view class="features-grid">
+        <view class="feature-item">
+          <view class="feature-icon-wrap primary"><view class="css-icon person"></view></view>
+          <view class="feature-title">智能裁剪</view>
+          <view class="feature-desc">自动识别人像位置</view>
+        </view>
+        <view class="feature-item">
+          <view class="feature-icon-wrap accent"><view class="css-icon palette"></view></view>
+          <view class="feature-title">专业背景</view>
+          <view class="feature-desc">白/蓝/红一键切换</view>
+        </view>
+        <view class="feature-item">
+          <view class="feature-icon-wrap success"><view class="css-icon download"></view></view>
+          <view class="feature-title">免费预览</view>
+          <view class="feature-desc">水印版免费下载</view>
+        </view>
+        <view class="feature-item">
+          <view class="feature-icon-wrap warning"><view class="css-icon clock"></view></view>
+          <view class="feature-title">高清输出</view>
+          <view class="feature-desc">支持冲印级分辨率</view>
         </view>
       </view>
     </view>
-  </view>
+  </block>
 
-  <!-- 服务特色 -->
-  <view class="features-section">
-    <view class="section-header">
-      <view class="section-title">服务特色</view>
-    </view>
-    <view class="features-grid">
-      <view class="feature-item">
-        <view class="feature-icon-wrap primary">
-          <view class="css-icon person"></view>
+  <!-- wx:if="result" 结果视图 -->
+  <block wx:elif="{{view === 'result'}}">
+    <view class="result-section">
+      <!-- 头部 -->
+      <view class="result-header">
+        <text class="result-title">{{selectedSpec?.name || '证件照'}}</text>
+        <view class="result-actions">
+          <view class="result-action" bindtap="reset">重新选</view>
+          <view class="result-action" bindtap="chooseImage">换照片</view>
         </view>
-        <view class="feature-title">智能抠图</view>
-        <view class="feature-desc">AI精准识别人像</view>
       </view>
-      <view class="feature-item">
-        <view class="feature-icon-wrap accent">
-          <view class="css-icon palette"></view>
-        </view>
-        <view class="feature-title">多色背景</view>
-        <view class="feature-desc">白/蓝/红自由切换</view>
-      </view>
-      <view class="feature-item">
-        <view class="feature-icon-wrap success">
-          <view class="css-icon download"></view>
-        </view>
-        <view class="feature-title">高清导出</view>
-        <view class="feature-desc">支持冲印级分辨率</view>
-      </view>
-      <view class="feature-item">
-        <view class="feature-icon-wrap warning">
-          <view class="css-icon clock"></view>
-        </view>
-        <view class="feature-title">历史记录</view>
-        <view class="feature-desc">随时查看和下载</view>
-      </view>
-    </view>
-  </view>
 
-  <!-- 底部留白 -->
+      <!-- 处理中 -->
+      <view class="result-loading" wx:if="{{processing}}">
+        <view class="load-spinner"></view>
+        <text>AI处理中...</text>
+      </view>
+
+      <!-- 结果 -->
+      <view class="result-preview" wx:elif="{{processed}}">
+        <image src="{{resultPreview}}" mode="aspectFit" class="result-image"></image>
+        <view class="result-badge">{{selectedSpec?.size || ''}} 白色背景</view>
+      </view>
+
+      <!-- 背景色选择 -->
+      <view class="result-colors" wx:if="{{processed}}">
+        <view class="color-swatch {{selectedBg === 'white' ? 'active' : ''}}" data-color="white" bindtap="switchColor">
+          <view class="swatch white"></view><text>白色</text>
+        </view>
+        <view class="color-swatch {{selectedBg === 'blue' ? 'active' : ''}}" data-color="blue" bindtap="switchColor">
+          <view class="swatch blue"></view><text>蓝色</text>
+        </view>
+        <view class="color-swatch {{selectedBg === 'red' ? 'active' : ''}}" data-color="red" bindtap="switchColor">
+          <view class="swatch red"></view><text>红色</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部 -->
+    <view class="bottom-action" wx:if="{{processed}}">
+      <button class="btn btn-ghost btn-large" bindtap="reset">重做</button>
+      <button class="btn btn-primary btn-large" bindtap="goExport">下一步</button>
+    </view>
+  </block>
+
   <view class="bottom-spacer"></view>
 </view>

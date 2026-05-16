@@ -1,0 +1,10 @@
+{
+  "name": "processPhoto",
+  "version": "1.0.0",
+  "description": "一键处理：人脸检测+裁剪+分割+换背景",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3",
+    "jimp": "^0.22.0"
+  }
+}
