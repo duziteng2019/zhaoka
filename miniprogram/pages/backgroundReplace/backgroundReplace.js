@@ -1,166 +1,113 @@
 // pages/backgroundReplace/backgroundReplace.js
+const app = getApp()
+
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
     previewUrl: '',
     selectedBgColor: '#FFFFFF',
     brightness: 0,
     smooth: 50,
     saturation: 0,
-    finalImageId: ''
+    finalImageId: '',
+    isProcessing: false,
+    useAiMode: false,
+    modeLabel: '颜色检测'
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad(options) {
-    // 获取裁剪后的图片信息
-    const croppedImage = wx.getStorageSync('croppedImage');
+    const croppedImage = wx.getStorageSync('croppedImage')
     if (!croppedImage) {
-      // 如果没有裁剪后的图片，跳转到裁剪页面
-      wx.navigateTo({
-        url: '/pages/cropEdit/cropEdit'
-      });
-      return;
+      wx.navigateTo({ url: '/pages/cropEdit/cropEdit' })
+      return
     }
 
     this.setData({
-      previewUrl: croppedImage.previewUrl
-    });
+      previewUrl: croppedImage.previewUrl,
+      fileID: croppedImage.fileID || ''
+    })
+
+    // 尝试AI分割
+    this.tryAiSegment()
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
+  // 尝试AI人像分割
+  async tryAiSegment() {
+    const previewUrl = this.data.previewUrl
+    if (!previewUrl) return
 
+    console.log('[backgroundReplace] 尝试AI人像分割...')
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'portraitSegment',
+        data: { imageUrl: previewUrl }
+      })
+
+      if (res.result && res.result.code === 0 && res.result.data) {
+        const mask = res.result.data.resultMask || res.result.data.resultImage
+        if (mask) {
+          this.setData({
+            maskBase64: mask,
+            useAiMode: res.result.data.source === 'ai',
+            modeLabel: res.result.data.source === 'ai' ? '🤖 AI分割' : '⚙️ 基础分割'
+          })
+          console.log(`[backgroundReplace] 分割成功 (${this.data.modeLabel})`)
+        }
+      } else {
+        console.log('[backgroundReplace] 分割返回空，用颜色检测')
+      }
+    } catch (err) {
+      console.log('[backgroundReplace] 分割失败，降级颜色检测:', err.message)
+    }
+
+    // 获取分割结果后立即刷新预览
+    this.updateBackground()
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-    return {
-      title: '证件照制作',
-      path: '/pages/home/home'
-    };
-  },
-
-  /**
-   * 选择背景颜色（WXML调用）
-   */
   selectBg(e) {
-    this.selectBgColor(e);
+    this.selectBgColor(e)
   },
 
-  /**
-   * 选择背景颜色
-   */
   selectBgColor(e) {
-    const color = e.currentTarget.dataset.color;
-    this.setData({
-      selectedBgColor: color
-    });
-    
-    // 实时更新预览效果
-    this.updateBackground();
+    const color = e.currentTarget.dataset.color
+    this.setData({ selectedBgColor: color })
+    this.updateBackground()
   },
 
-  /**
-   * 亮度调节变化
-   */
   onBrightnessChange(e) {
-    this.setData({
-      brightness: e.detail.value
-    });
-    
-    // 实时更新预览效果
-    this.updateBackground();
+    this.setData({ brightness: e.detail.value })
+    this.updateBackground()
   },
 
-  /**
-   * 磨皮调节变化
-   */
   onSmoothChange(e) {
-    this.setData({
-      smooth: e.detail.value
-    });
-    
-    // 实时更新预览效果
-    this.updateBackground();
+    this.setData({ smooth: e.detail.value })
+    this.updateBackground()
   },
 
-  /**
-   * 饱和度调节变化
-   */
   onSaturationChange(e) {
-    this.setData({
-      saturation: e.detail.value
-    });
-    
-    // 实时更新预览效果
-    this.updateBackground();
+    this.setData({ saturation: e.detail.value })
+    this.updateBackground()
   },
 
-  /**
-   * 更新背景和美颜效果
-   */
   updateBackground() {
-    wx.showLoading({
-      title: '处理中...'
-    });
+    if (this.data.isProcessing) return
+    this.setData({ isProcessing: true })
 
-    // 获取裁剪后的图片信息
-    const croppedImage = wx.getStorageSync('croppedImage');
+    wx.showLoading({ title: '处理中...' })
+
+    const croppedImage = wx.getStorageSync('croppedImage')
     if (!croppedImage) {
-      wx.hideLoading();
-      return;
+      wx.hideLoading()
+      this.setData({ isProcessing: false })
+      return
     }
 
-    // 调用replaceBackground云函数进行背景替换和美颜处理
     wx.cloud.callFunction({
       name: 'replaceBackground',
       data: {
         imageUrl: croppedImage.previewUrl,
         bgColor: this.data.selectedBgColor,
+        maskBase64: this.data.maskBase64 || '',
         beautyParams: {
           brightness: this.data.brightness,
           smooth: this.data.smooth,
@@ -168,51 +115,39 @@ Page({
         }
       },
       success: res => {
-        console.log('背景替换成功', res);
-        this.setData({
-          previewUrl: res.result.data.finalUrl,
-          finalImageId: res.result.data.finalImageId
-        });
-        wx.hideLoading();
+        console.log('背景替换成功', res.result)
+        if (res.result && res.result.code === 0) {
+          this.setData({
+            previewUrl: res.result.data.preview,
+            finalImageId: res.result.data.fileID || '',
+          })
+        }
+        wx.hideLoading()
+        this.setData({ isProcessing: false })
       },
       fail: err => {
-        console.error('背景替换失败', err);
-        wx.hideLoading();
-        wx.showToast({
-          title: '处理失败，请重试',
-          icon: 'none'
-        });
+        console.error('背景替换失败', err)
+        wx.hideLoading()
+        wx.showToast({ title: '处理失败，请重试', icon: 'none' })
+        this.setData({ isProcessing: false })
       }
-    });
+    })
   },
 
-  /**
-   * 返回上一页
-   */
   goBack() {
-    wx.navigateBack();
+    wx.navigateBack()
   },
 
-  /**
-   * 下一步 - 跳转到导出页
-   */
   goNext() {
-    this.goToExport();
+    this.goToExport()
   },
 
-  /**
-   * 跳转到导出页面
-   */
   goToExport() {
-    if (!this.data.finalImageId) {
-      wx.showToast({
-        title: '请先完成背景替换',
-        icon: 'none'
-      });
-      return;
+    if (!this.data.finalImageId && !this.data.previewUrl) {
+      wx.showToast({ title: '请先完成背景替换', icon: 'none' })
+      return
     }
 
-    // 保存最终图片信息
     wx.setStorageSync('finalImage', {
       previewUrl: this.data.previewUrl,
       finalImageId: this.data.finalImageId,
@@ -222,11 +157,8 @@ Page({
         smooth: this.data.smooth,
         saturation: this.data.saturation
       }
-    });
+    })
 
-    // 跳转到导出页面
-    wx.navigateTo({
-      url: '/pages/export/export'
-    });
+    wx.navigateTo({ url: '/pages/export/export' })
   }
 })

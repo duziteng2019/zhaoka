@@ -10,6 +10,20 @@ page {
   padding-bottom: 180rpx;
 }
 
+/* AI模式标签 */
+.ai-badge {
+  text-align: center;
+  padding: 8rpx 0;
+}
+.ai-badge text {
+  display: inline-block;
+  background: #2563EB;
+  color: #fff;
+  font-size: 22rpx;
+  padding: 4rpx 20rpx;
+  border-radius: 20rpx;
+}
+
 /* ============================================
    页面头部
    ============================================ */

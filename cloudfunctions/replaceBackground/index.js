@@ -9,16 +9,10 @@ const BG_COLORS = {
   red: { r: 255, g: 0, b: 0 }
 }
 
-function colorDistance(c1, c2) {
-  return Math.sqrt(
-    (c1.r - c2.r) ** 2 +
-    (c1.g - c2.g) ** 2 +
-    (c1.b - c2.b) ** 2
-  )
-}
+// ─── 颜色距离（降级用） ───
 
-function isNearColor(pixel, target, threshold) {
-  return colorDistance(pixel, target) < threshold
+function colorDistance(c1, c2) {
+  return Math.sqrt((c1.r - c2.r) ** 2 + (c1.g - c2.g) ** 2 + (c1.b - c2.b) ** 2)
 }
 
 function adjustBrightness(r, g, b, amount) {
@@ -29,11 +23,110 @@ function adjustBrightness(r, g, b, amount) {
   ]
 }
 
+function applySaturation(r, g, b, amount) {
+  const gray = 0.299 * r + 0.587 * g + 0.114 * b
+  const f = 1 + amount / 100
+  return [
+    Math.max(0, Math.min(255, Math.round(gray + (r - gray) * f))),
+    Math.max(0, Math.min(255, Math.round(gray + (g - gray) * f))),
+    Math.max(0, Math.min(255, Math.round(gray + (b - gray) * f)))
+  ]
+}
+
+// ─── mask方式：用分割结果换背景 ───
+
+function applyMask(image, mask, targetColor) {
+  const w = image.bitmap.width
+  const h = image.bitmap.height
+
+  image.scan(0, 0, w, h, function (x, y, idx) {
+    const maskIdx = (y * w + x) * 4
+    const maskR = mask.bitmap.data[maskIdx]
+    const maskG = mask.bitmap.data[maskIdx + 1]
+    const maskB = mask.bitmap.data[maskIdx + 2]
+
+    // mask白=人像保留，mask黑=背景替换
+    const isPerson = (maskR + maskG + maskB) > 128 * 3
+    if (!isPerson) {
+      this.bitmap.data[idx] = targetColor.r
+      this.bitmap.data[idx + 1] = targetColor.g
+      this.bitmap.data[idx + 2] = targetColor.b
+    }
+  })
+  return image
+}
+
+// ─── 颜色检测方式（降级） ───
+
+function applyColorDetection(image, bgColor, targetColor, brightness) {
+  const w = image.bitmap.width
+  const h = image.bitmap.height
+
+  image.scan(0, 0, w, h, function (x, y, idx) {
+    let r = this.bitmap.data[idx]
+    let g = this.bitmap.data[idx + 1]
+    let b = this.bitmap.data[idx + 2]
+
+    if (brightness !== 0) {
+      const adj = adjustBrightness(r, g, b, brightness)
+      r = adj[0]; g = adj[1]; b = adj[2]
+    }
+
+    const bgThreshold = 60
+    const pixel = { r, g, b }
+    const isWhiteBg = colorDistance(pixel, { r: 255, g: 255, b: 255 }) < bgThreshold
+    const isBlueBg = colorDistance(pixel, { r: 0, g: 122, b: 255 }) < bgThreshold * 1.5
+    const isRedBg = colorDistance(pixel, { r: 255, g: 0, b: 0 }) < bgThreshold * 1.5
+
+    if (isWhiteBg || isBlueBg || isRedBg) {
+      this.bitmap.data[idx] = targetColor.r
+      this.bitmap.data[idx + 1] = targetColor.g
+      this.bitmap.data[idx + 2] = targetColor.b
+    } else {
+      this.bitmap.data[idx] = r
+      this.bitmap.data[idx + 1] = g
+      this.bitmap.data[idx + 2] = b
+    }
+  })
+  return image
+}
+
+// ─── 美颜（磨皮） ───
+
+function applySmoothing(image, amount) {
+  if (amount <= 0) return image
+  const w = image.bitmap.width
+  const h = image.bitmap.height
+  const strength = amount / 100
+  const copy = image.clone()
+
+  image.scan(1, 1, w - 2, h - 2, function (x, y, idx) {
+    let rSum = 0, gSum = 0, bSum = 0, count = 0
+    for (let dy = -1; dy <= 1; dy++) {
+      for (let dx = -1; dx <= 1; dx++) {
+        const si = ((y + dy) * w + (x + dx)) * 4
+        rSum += copy.bitmap.data[si]
+        gSum += copy.bitmap.data[si + 1]
+        bSum += copy.bitmap.data[si + 2]
+        count++
+      }
+    }
+    const avgR = rSum / count, avgG = gSum / count, avgB = bSum / count
+    this.bitmap.data[idx] = Math.round(this.bitmap.data[idx] * (1 - strength) + avgR * strength)
+    this.bitmap.data[idx + 1] = Math.round(this.bitmap.data[idx + 1] * (1 - strength) + avgG * strength)
+    this.bitmap.data[idx + 2] = Math.round(this.bitmap.data[idx + 2] * (1 - strength) + avgB * strength)
+  })
+  return image
+}
+
+// ─── 入口 ───
+
 exports.main = async (event, context) => {
-  const { action, fileID, imageUrl, bgColor, beautyParams } = event
+  const { action, fileID, imageUrl, bgColor, beautyParams, maskBase64 } = event
 
   try {
     let image
+    let hasValidMask = false
 
     if (fileID) {
       const res = await cloud.downloadFile({ fileID })
@@ -45,70 +138,83 @@ exports.main = async (event, context) => {
     }
 
     const targetColor = BG_COLORS[bgColor] || BG_COLORS.white
-    const brightness = beautyParams && beautyParams.brightness ? parseInt(beautyParams.brightness) : 0
+    const brightness = beautyParams?.brightness ? parseInt(beautyParams.brightness) : 0
+    const smooth = beautyParams?.smooth ? parseInt(beautyParams.smooth) : 0
+    const saturation = beautyParams?.saturation ? parseInt(beautyParams.saturation) : 0
 
-    const width = image.bitmap.width
-    const height = image.bitmap.height
+    // 1. 亮度
+    if (brightness !== 0) {
+      image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
+        const adj = adjustBrightness(
+          this.bitmap.data[idx],
+          this.bitmap.data[idx + 1],
+          this.bitmap.data[idx + 2],
+          brightness
+        )
+        this.bitmap.data[idx] = adj[0]
+        this.bitmap.data[idx + 1] = adj[1]
+        this.bitmap.data[idx + 2] = adj[2]
+      })
+    }
 
-    image.scan(0, 0, width, height, function(x, y, idx) {
-      let r = this.bitmap.data[idx]
-      let g = this.bitmap.data[idx + 1]
-      let b = this.bitmap.data[idx + 2]
+    // 2. 磨皮
+    if (smooth > 0) {
+      image = applySmoothing(image, smooth)
+    }
 
-      if (brightness !== 0) {
-        const adjusted = adjustBrightness(r, g, b, brightness)
-        r = adjusted[0]
-        g = adjusted[1]
-        b = adjusted[2]
-      }
+    // 3. 饱和度
+    if (saturation !== 0) {
+      image.scan(0, 0, image.bitmap.width, image.bitmap.height, function (x, y, idx) {
+        const adj = applySaturation(
+          this.bitmap.data[idx],
+          this.bitmap.data[idx + 1],
+          this.bitmap.data[idx + 2],
+          saturation
+        )
+        this.bitmap.data[idx] = adj[0]
+        this.bitmap.data[idx + 1] = adj[1]
+        this.bitmap.data[idx + 2] = adj[2]
+      })
+    }
 
-      const bgThreshold = 60
-      const pixel = { r, g, b }
-
-      if (action === 'replace') {
-        const isWhiteBg = isNearColor(pixel, { r: 255, g: 255, b: 255 }, bgThreshold)
-        const isBlueBg = isNearColor(pixel, { r: 0, g: 122, b: 255 }, bgThreshold * 1.5)
-        const isRedBg = isNearColor(pixel, { r: 255, g: 0, b: 0 }, bgThreshold * 1.5)
-
-        if (isWhiteBg || isBlueBg || isRedBg) {
-          if (bgColor === 'white') {
-            this.bitmap.data[idx] = 255
-            this.bitmap.data[idx + 1] = 255
-            this.bitmap.data[idx + 2] = 255
-          } else if (bgColor === 'blue') {
-            this.bitmap.data[idx] = targetColor.r
-            this.bitmap.data[idx + 1] = targetColor.g
-            this.bitmap.data[idx + 2] = targetColor.b
-          } else if (bgColor === 'red') {
-            this.bitmap.data[idx] = targetColor.r
-            this.bitmap.data[idx + 1] = targetColor.g
-            this.bitmap.data[idx + 2] = targetColor.b
-          }
+    // 4. 背景替换：有mask用mask，没有用颜色检测
+    if (maskBase64) {
+      try {
+        const mask = await Jimp.read(Buffer.from(maskBase64.replace(/^data:image\/\w+;base64,/, ''), 'base64'))
+        // 确保mask尺寸匹配
+        if (mask.bitmap.width === image.bitmap.width && mask.bitmap.height === image.bitmap.height) {
+          image = applyMask(image, mask, targetColor)
+          hasValidMask = true
         }
-      } else {
-        this.bitmap.data[idx] = r
-        this.bitmap.data[idx + 1] = g
-        this.bitmap.data[idx + 2] = b
+      } catch (e) {
+        console.log('[replaceBackground] Mask读取出错，降级到颜色检测:', e.message)
       }
-    })
+    }
 
+    if (!hasValidMask) {
+      image = applyColorDetection(image, bgColor, targetColor, brightness)
+    }
+
+    // 预览模式：返回base64
     if (action === 'preview') {
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG)
       return { code: 0, data: { preview: base64 }, message: '预览成功' }
     }
 
+    // 替换模式：上传到云存储
     if (action === 'replace') {
       const buffer = await image.getBufferAsync(Jimp.MIME_JPEG)
       const cloudPath = `final/${Date.now()}_${Math.random().toString(36).substring(2, 8)}.jpg`
-      const uploadResult = await cloud.uploadFile({
-        cloudPath,
-        fileContent: buffer
-      })
+      const uploadResult = await cloud.uploadFile({ cloudPath, fileContent: buffer })
 
       return {
         code: 0,
-        data: { fileID: uploadResult.fileID, cloudPath },
-        message: '背景替换成功'
+        data: {
+          fileID: uploadResult.fileID,
+          cloudPath,
+          maskUsed: hasValidMask
+        },
+        message: hasValidMask ? 'AI背景替换成功' : '背景替换成功（颜色检测模式）'
       }
     }
 

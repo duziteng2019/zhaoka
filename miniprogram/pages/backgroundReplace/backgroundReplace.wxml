@@ -6,10 +6,15 @@
     <view class="header-step">第 3 步</view>
   </view>
 
+  <!-- AI模式标签 -->
+  <view class="ai-badge" wx:if="{{modeLabel}}">
+    <text>{{modeLabel}}</text>
+  </view>
+
   <!-- 预览区域 -->
   <view class="preview-section fade-in">
     <view class="preview-area">
-      <image class="preview-image" src="{{processedImage}}" mode="aspectFit"></image>
+      <image class="preview-image" src="{{previewUrl}}" mode="aspectFit"></image>
     </view>
   </view>
 
@@ -17,15 +22,15 @@
   <view class="color-section fade-in">
     <view class="section-title">选择背景色</view>
     <view class="color-grid">
-      <view class="color-item {{currentBg === 'white' ? 'active' : ''}}" bindtap="selectBg" data-bg="white">
+      <view class="color-item {{selectedBgColor === 'white' ? 'active' : ''}}" bindtap="selectBgColor" data-color="white">
         <view class="color-swatch white"></view>
         <view class="color-label">白色</view>
       </view>
-      <view class="color-item {{currentBg === 'blue' ? 'active' : ''}}" bindtap="selectBg" data-bg="blue">
+      <view class="color-item {{selectedBgColor === 'blue' ? 'active' : ''}}" bindtap="selectBgColor" data-color="blue">
         <view class="color-swatch blue"></view>
         <view class="color-label">蓝色</view>
       </view>
-      <view class="color-item {{currentBg === 'red' ? 'active' : ''}}" bindtap="selectBg" data-bg="red">
+      <view class="color-item {{selectedBgColor === 'red' ? 'active' : ''}}" bindtap="selectBgColor" data-color="red">
         <view class="color-swatch red"></view>
         <view class="color-label">红色</view>
       </view>
@@ -45,9 +50,16 @@
     <view class="slider-item">
       <view class="slider-label">
         <text>磨皮</text>
-        <text class="slider-value">{{smoothness}}</text>
+        <text class="slider-value">{{smooth}}</text>
       </view>
-      <slider min="0" max="100" value="{{smoothness}}" bindchange="onSmoothnessChange" block-size="20" activeColor="#2563EB" backgroundColor="#E5E7EB"/>
+      <slider min="0" max="100" value="{{smooth}}" bindchange="onSmoothChange" block-size="20" activeColor="#2563EB" backgroundColor="#E5E7EB"/>
+    </view>
+    <view class="slider-item">
+      <view class="slider-label">
+        <text>饱和度</text>
+        <text class="slider-value">{{saturation}}</text>
+      </view>
+      <slider min="-50" max="50" value="{{saturation}}" bindchange="onSaturationChange" block-size="20" activeColor="#2563EB" backgroundColor="#E5E7EB"/>
     </view>
   </view>
 
