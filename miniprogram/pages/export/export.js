@@ -1,45 +1,33 @@
+// pages/export/export.js
 const cloudManager = require('../../utils/enhancedCloud')
 
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
     previewUrl: '',
     specName: '',
     bgColorName: '',
     finalImageId: '',
     selectedSpec: null,
-    finalImage: null,
     selectedOption: 'free',
-    hdPrice: 9.9
+    hdPrice: 9.9,
+    isDownloading: false
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad(options) {
-    // 获取最终图片信息
-    const finalImage = wx.getStorageSync('finalImage');
+    const finalImage = wx.getStorageSync('finalImage')
     if (!finalImage) {
-      wx.navigateTo({ url: '/pages/backgroundReplace/backgroundReplace' });
-      return;
+      wx.navigateTo({ url: '/pages/backgroundReplace/backgroundReplace' })
+      return
     }
 
-    // 获取选中的规格
-    const selectedSpec = wx.getStorageSync('selectedSpec');
+    const selectedSpec = wx.getStorageSync('selectedSpec')
     if (!selectedSpec) {
-      wx.navigateTo({ url: '/pages/sizeSelect/sizeSelect' });
-      return;
+      wx.navigateTo({ url: '/pages/sizeSelect/sizeSelect' })
+      return
     }
 
-    // 获取编辑模式和历史记录ID
-    const editHistory = wx.getStorageSync('editHistory');
-    const editHistoryId = editHistory ? editHistory._id : null;
-
-    // 获取背景颜色名称
-    const bgColorName = this.getBgColorName(finalImage.bgColor);
+    const bgColorName = this.getBgColorName(finalImage.bgColor)
 
     this.setData({
       previewUrl: finalImage.previewUrl,
@@ -48,181 +36,92 @@ Page({
       selectedSpec: selectedSpec,
       specName: selectedSpec.name,
       bgColorName: bgColorName,
-      editHistoryId: editHistoryId
-    });
-
-    // 保存历史记录
-    this.saveHistory();
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-    return {
-      title: '证件照制作',
-      path: '/pages/home/home'
-    };
-  },
-
-  /**
-   * 根据颜色值获取颜色名称
-   */
   getBgColorName(color) {
     const colorMap = {
-      '#FFFFFF': '白色',
-      '#4A90E2': '蓝色',
-      '#E74C3C': '红色'
-    };
-    return colorMap[color] || '自定义';
+      '#FFFFFF': '白色', '#4A90E2': '蓝色', '#E74C3C': '红色',
+      white: '白色', blue: '蓝色', red: '红色'
+    }
+    return colorMap[color] || '自定义'
   },
 
-  /**
-   * 保存历史记录
-   */
-  saveHistory() {
-    wx.cloud.callFunction({
-      name: 'saveHistory',
-      data: {
-        spec: this.data.selectedSpec ? { name: this.data.selectedSpec.name } : {},
-        originalFileID: '',
-        croppedFileID: '',
-        finalFileID: this.data.finalImageId,
-        bgColor: this.data.finalImage ? this.data.finalImage.bgColor : 'white'
-      },
-      success: res => {
-        console.log('保存历史记录成功', res);
-      },
-      fail: err => {
-        console.error('保存历史记录失败', err);
+  // ─── 免费低清带水印 ───
+  async downloadFree() {
+    if (this.data.isDownloading) return
+    this.setData({ isDownloading: true })
+    wx.showLoading({ title: '生成预览版...' })
+
+    try {
+      const res = await wx.cloud.callFunction({
+        name: 'replaceBackground',
+        data: {
+          action: 'watermark',
+          bgColor: this.data.finalImage?.bgColor || 'white',
+          imageUrl: this.data.finalImage?.previewUrl || this.data.previewUrl
+        }
+      })
+
+      if (res.result && res.result.code === 0) {
+        const fileID = res.result.data.fileID
+        const dl = await wx.cloud.downloadFile({ fileID })
+        await this.saveImageToAlbum(dl.tempFilePath)
+        // 免费下载也存历史（标记为free）
+        this.saveHistory('free')
+      } else {
+        wx.showToast({ title: '生成失败', icon: 'none' })
       }
-    });
+    } catch (err) {
+      console.error('免费下载失败:', err)
+      wx.showToast({ title: '下载失败', icon: 'none' })
+    }
+
+    wx.hideLoading()
+    this.setData({ isDownloading: false })
   },
 
-  /**
-   * 免费低清下载
-   */
-  downloadFree() {
-    wx.showLoading({
-      title: '下载中...'
-    });
-
-    // 调用下载API获取临时URL
-    wx.cloud.downloadFile({
-      fileID: this.data.finalImageId,
-      success: res => {
-        // 保存图片到相册
-        this.saveImageToAlbum(res.tempFilePath);
-        wx.hideLoading();
-      },
-      fail: err => {
-        console.error('下载失败', err);
-        wx.hideLoading();
-        wx.showToast({
-          title: '下载失败，请重试',
-          icon: 'none'
-        });
-      }
-    });
-  },
-
-  /**
-   * 付费高清下载
-   */
+  // ─── 付费高清 ───
   async downloadPremium() {
+    if (this.data.isDownloading) return
+    this.setData({ isDownloading: true })
     wx.showLoading({ title: '创建订单...' })
+
     try {
       const result = await cloudManager.createOrderItem({
-        specId: this.data.selectedSpec ? this.data.selectedSpec.id : '',
+        specId: this.data.selectedSpec?.id || '',
         imageId: this.data.finalImageId
       })
 
       if (result.code !== 0) {
-        wx.hideLoading()
-        wx.showToast({ title: result.message || '创建订单失败', icon: 'none' })
-        return
+        throw new Error(result.message || '创建订单失败')
       }
 
       const orderData = result.data
-      await this.generatePayParams(orderData)
-      wx.hideLoading()
-    } catch (err) {
-      wx.hideLoading()
-      wx.showToast({ title: '创建订单失败，请重试', icon: 'none' })
-    }
-  },
-
-  /**
-   * 生成支付参数
-   */
-  async generatePayParams(orderData) {
-    wx.showLoading({ title: '获取支付参数...' })
-    try {
-      const result = await cloudManager.initiatePayment({
+      const payResult = await cloudManager.initiatePayment({
         orderId: orderData.orderId,
         orderNo: orderData.orderNo
       })
 
-      if (result.code !== 0) {
-        wx.hideLoading()
-        wx.showToast({ title: result.message || '支付功能暂未开通', icon: 'none' })
-        return
+      if (payResult.code !== 0) {
+        throw new Error(payResult.message || '支付功能暂未开通')
       }
 
-      const payParams = result.data.payParams
+      const payParams = payResult.data.payParams
       await this.requestPayment(payParams, orderData)
-      wx.hideLoading()
+
+      // 支付成功 → 下载原图 + 存历史
+      await this.downloadHighResImage()
+      this.saveHistory('paid')
     } catch (err) {
-      wx.hideLoading()
-      wx.showToast({ title: '获取支付参数失败', icon: 'none' })
+      console.error('高清下载失败:', err)
+      wx.showToast({ title: err.message || '操作失败', icon: 'none' })
     }
+
+    wx.hideLoading()
+    this.setData({ isDownloading: false })
   },
 
-  /**
-   * 调用微信支付
-   */
   requestPayment(payParams, orderData) {
     return new Promise((resolve, reject) => {
       wx.requestPayment({
@@ -231,109 +130,85 @@ Page({
         package: payParams.package,
         signType: payParams.signType,
         paySign: payParams.paySign,
-        success: (res) => {
-          this.downloadHighResImage()
-          resolve(res)
-        },
+        success: resolve,
         fail: (err) => {
-          wx.showToast({ title: '支付失败，请重试', icon: 'none' })
+          wx.showToast({ title: '支付取消', icon: 'none' })
           reject(err)
         }
       })
     })
   },
 
-  /**
-   * 下载高清图片
-   */
-  downloadHighResImage() {
-    wx.showLoading({
-      title: '下载高清图片...'
-    });
-
-    // 直接下载高清图片（实际项目中可以根据需要添加高清图片处理逻辑）
-    wx.cloud.downloadFile({
-      fileID: this.data.finalImageId,
-      success: res => {
-        // 保存图片到相册
-        this.saveImageToAlbum(res.tempFilePath);
-        wx.hideLoading();
+  // 只有支付成功后才存历史
+  saveHistory(downloadType) {
+    const data = this.data
+    wx.cloud.callFunction({
+      name: 'saveHistory',
+      data: {
+        spec: data.selectedSpec ? { name: data.selectedSpec.name } : {},
+        originalFileID: '',
+        finalFileID: data.finalImageId || '',
+        bgColor: data.finalImage?.bgColor || 'white',
+        downloadType: downloadType,
+        paidAt: downloadType === 'paid' ? new Date().toISOString() : null
       },
-      fail: err => {
-        console.error('下载失败', err);
-        wx.hideLoading();
-        wx.showToast({
-          title: '下载失败，请重试',
-          icon: 'none'
-        });
-      }
-    });
+      success: () => console.log('历史保存成功'),
+      fail: (err) => console.error('历史保存失败', err)
+    })
   },
 
-  /**
-   * 选择下载选项
-   */
+  async downloadHighResImage() {
+    wx.showLoading({ title: '下载高清图片...' })
+    try {
+      const res = await wx.cloud.downloadFile({ fileID: this.data.finalImageId })
+      await this.saveImageToAlbum(res.tempFilePath)
+    } catch (err) {
+      console.error('高清下载失败:', err)
+      wx.showToast({ title: '下载失败', icon: 'none' })
+    }
+    wx.hideLoading()
+  },
+
   selectOption(e) {
-    const option = e.currentTarget.dataset.option;
-    this.setData({ selectedOption: option });
+    this.setData({ selectedOption: e.currentTarget.dataset.option })
   },
 
-  /**
-   * 返回首页
-   */
   goHome() {
-    wx.reLaunch({
-      url: '/pages/home/home'
-    });
+    wx.reLaunch({ url: '/pages/home/home' })
   },
 
-  /**
-   * 下载 - 根据选项调用不同方法
-   */
   download() {
     if (this.data.selectedOption === 'free') {
-      this.downloadFree();
+      this.downloadFree()
     } else {
-      this.downloadPremium();
+      this.downloadPremium()
     }
   },
 
-  /**
-   * 保存图片到相册
-   */
   saveImageToAlbum(filePath) {
-    wx.saveImageToPhotosAlbum({
-      filePath: filePath,
-      success: res => {
-        wx.showToast({
-          title: '保存成功',
-          icon: 'success'
-        });
-      },
-      fail: err => {
-        console.error('保存到相册失败', err);
-        // 如果是因为权限问题，提示用户开启权限
-        if (err.errMsg.indexOf('auth deny') !== -1) {
-          wx.showToast({
-            title: '请开启保存图片权限',
-            icon: 'none'
-          });
-          // 引导用户开启权限
-          wx.openSetting({
-            success: settingRes => {
-              if (settingRes.authSetting['scope.writePhotosAlbum']) {
-                // 权限已开启，再次尝试保存
-                this.saveImageToAlbum(filePath);
+    return new Promise((resolve) => {
+      wx.saveImageToPhotosAlbum({
+        filePath,
+        success: () => {
+          wx.showToast({ title: '已保存到相册', icon: 'success' })
+          resolve(true)
+        },
+        fail: (err) => {
+          if (err.errMsg.indexOf('auth deny') !== -1) {
+            wx.showToast({ title: '请开启相册权限', icon: 'none' })
+            wx.openSetting({
+              success: (res) => {
+                if (res.authSetting['scope.writePhotosAlbum']) {
+                  this.saveImageToAlbum(filePath).then(resolve)
+                }
               }
-            }
-          });
-        } else {
-          wx.showToast({
-            title: '保存失败，请重试',
-            icon: 'none'
-          });
+            })
+          } else {
+            wx.showToast({ title: '保存失败', icon: 'none' })
+            resolve(false)
+          }
         }
-      }
-    });
+      })
+    })
   }
 })

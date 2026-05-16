@@ -1,74 +1,40 @@
 // pages/home/home.js
 Page({
 
-  /**
-   * 页面的初始数据
-   */
   data: {
     specs: [
       { id: 1, name: '一寸', size: '25×35mm' },
       { id: 2, name: '二寸', size: '35×49mm' },
       { id: 3, name: '护照', size: '33×48mm' },
       { id: 4, name: '签证', size: '35×45mm' }
-    ]
+    ],
+    loadingSpecs: true
   },
 
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad(options) {
-
+    this.loadSpecs()
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  async loadSpecs() {
+    try {
+      const res = await wx.cloud.callFunction({ name: 'getSpecs', data: {} })
+      if (res.result && res.result.code === 0 && res.result.data && res.result.data.length > 0) {
+        this.setData({ specs: res.result.data, loadingSpecs: false })
+        console.log(`[Home] 从云端加载${res.result.data.length}个规格`)
+        return
+      }
+    } catch (err) {
+      console.log('[Home] 云端规格加载失败，使用本地默认:', err.message)
+    }
+    this.setData({ loadingSpecs: false })
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
   onShow() {
     if (typeof this.getTabBar === 'function' && this.getTabBar()) {
-      this.getTabBar().setData({
-        selected: 0
-      });
+      this.getTabBar().setData({ selected: 0 })
     }
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
   onShareAppMessage() {
     return {
       title: '证件照制作',
@@ -76,29 +42,21 @@ Page({
     }
   },
 
-  /**
-   * 选择规格
-   */
   selectSpec(e) {
-    const specId = e.currentTarget.dataset.spec;
-    const spec = this.data.specs.find(s => s.id == specId);
-    
-    // 保存选中的规格到全局数据或本地存储
-    wx.setStorageSync('selectedSpec', spec);
-    
-    // 跳转到上传页面
+    const specId = e.currentTarget.dataset.spec
+    const spec = this.data.specs.find(s => s.id == specId)
+    if (!spec) return
+
+    wx.setStorageSync('selectedSpec', spec)
+
     wx.navigateTo({
       url: '/pages/upload/upload'
-    });
+    })
   },
 
-  /**
-   * 立即制作
-   */
   startCreate() {
-    // 跳转到上传页面
     wx.navigateTo({
       url: '/pages/upload/upload'
-    });
+    })
   }
 })

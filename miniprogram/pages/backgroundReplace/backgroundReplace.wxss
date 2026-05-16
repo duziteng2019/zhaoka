@@ -24,6 +24,35 @@ page {
   border-radius: 20rpx;
 }
 
+/* 分割帮助提示 */
+.mask-help {
+  text-align: center;
+  padding: 6rpx 0;
+}
+.mask-help text {
+  font-size: 22rpx;
+  color: #2563EB;
+}
+
+/* 视图切换栏 */
+.view-mode-bar {
+  display: flex;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 12rpx 0;
+}
+.mode-tab {
+  padding: 6rpx 28rpx;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  background: #f0f0f0;
+  color: #666;
+}
+.mode-tab.active {
+  background: #2563EB;
+  color: #fff;
+}
+
 /* ============================================
    页面头部
    ============================================ */

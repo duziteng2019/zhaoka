@@ -195,6 +195,49 @@ exports.main = async (event, context) => {
       image = applyColorDetection(image, bgColor, targetColor, brightness)
     }
 
+    // 水印模式：低质 + 水印
+    if (action === 'watermark') {
+      // 缩放到50%
+      image.resize(image.bitmap.width / 2, Jimp.AUTO)
+
+      // 叠加半透明水印文字
+      const w = image.bitmap.width
+      const h = image.bitmap.height
+      const overlay = new Jimp(w, h, 0x00000000)
+      const Jimp2 = require('jimp')
+      // 用半透明色块 + 文字模拟水印
+      const font = await Jimp2.loadFont(Jimp2.FONT_SANS_16_WHITE)
+      const watermarkText = '证件照 · 预览版'
+      const textW = watermarkText.length * 10
+      overlay.scan(0, 0, w, h, function (x, y, idx) {
+        // 底部居中水印条
+        if (y > h - 60 && y < h - 10 && x > (w - textW) / 2 - 20 && x < (w + textW) / 2 + 20) {
+          this.bitmap.data[idx] = 0
+          this.bitmap.data[idx + 1] = 0
+          this.bitmap.data[idx + 2] = 0
+          this.bitmap.data[idx + 3] = 140  // 半透明
+        }
+      })
+      image.composite(overlay, 0, 0)
+      image.print(font, (w - textW) / 2, h - 48, watermarkText)
+
+      // 低质量压缩上传
+      const buffer = await image.getBufferAsync(Jimp.MIME_JPEG)
+      const cloudPath = `preview/${Date.now()}_${Math.random().toString(36).substring(2, 8)}.jpg`
+      const uploadResult = await cloud.uploadFile({ cloudPath, fileContent: buffer })
+
+      return {
+        code: 0,
+        data: {
+          fileID: uploadResult.fileID,
+          cloudPath,
+          width: w,
+          height: h
+        },
+        message: '预览版已生成'
+      }
+    }
+
     // 预览模式：返回base64
     if (action === 'preview') {
       const base64 = await image.getBase64Async(Jimp.MIME_JPEG)

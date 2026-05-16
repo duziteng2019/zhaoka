@@ -9,7 +9,7 @@
   <!-- 预览卡片 -->
   <view class="preview-card fade-in">
     <view class="preview-area">
-      <image class="preview-image" src="{{finalImage}}" mode="aspectFit"></image>
+      <image class="preview-image" src="{{previewUrl}}" mode="aspectFit"></image>
     </view>
     <view class="preview-info">
       <view class="info-item">

@@ -11,11 +11,23 @@
     <text>{{modeLabel}}</text>
   </view>
 
+  <!-- 分割帮助提示 -->
+  <view class="mask-help" wx:if="{{showMaskHelp}}">
+    <text>✅ 人像分割完成，点「遮罩」查看识别区域</text>
+  </view>
+
   <!-- 预览区域 -->
   <view class="preview-section fade-in">
     <view class="preview-area">
       <image class="preview-image" src="{{previewUrl}}" mode="aspectFit"></image>
     </view>
+  </view>
+
+  <!-- 视图切换 -->
+  <view class="view-mode-bar" wx:if="{{maskImageUrl}}">
+    <view class="mode-tab {{viewMode === 'original' ? 'active' : ''}}" bindtap="switchViewMode" data-mode="original">原始</view>
+    <view class="mode-tab {{viewMode === 'mask' ? 'active' : ''}}" bindtap="switchViewMode" data-mode="mask">遮罩</view>
+    <view class="mode-tab {{viewMode === 'result' ? 'active' : ''}}" bindtap="switchViewMode" data-mode="result">结果</view>
   </view>
 
   <!-- 背景色选择 -->

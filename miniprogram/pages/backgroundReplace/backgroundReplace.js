@@ -12,7 +12,12 @@ Page({
     finalImageId: '',
     isProcessing: false,
     useAiMode: false,
-    modeLabel: '颜色检测'
+    modeLabel: '颜色检测',
+    maskBase64: '',
+    viewMode: 'result',          // 'original' | 'mask' | 'result'
+    originalImageUrl: '',
+    maskImageUrl: '',
+    showMaskHelp: false,
   },
 
   onLoad(options) {
@@ -24,14 +29,13 @@ Page({
 
     this.setData({
       previewUrl: croppedImage.previewUrl,
+      originalImageUrl: croppedImage.previewUrl,
       fileID: croppedImage.fileID || ''
     })
 
-    // 尝试AI分割
     this.tryAiSegment()
   },
 
-  // 尝试AI人像分割
   async tryAiSegment() {
     const previewUrl = this.data.previewUrl
     if (!previewUrl) return
@@ -48,10 +52,16 @@ Page({
         if (mask) {
           this.setData({
             maskBase64: mask,
+            maskImageUrl: mask,
             useAiMode: res.result.data.source === 'ai',
-            modeLabel: res.result.data.source === 'ai' ? '🤖 AI分割' : '⚙️ 基础分割'
+            modeLabel: res.result.data.source === 'ai' ? '🤖 AI分割' : '⚙️ 基础分割',
+            showMaskHelp: true
           })
           console.log(`[backgroundReplace] 分割成功 (${this.data.modeLabel})`)
+          // 2秒后隐藏帮助提示
+          setTimeout(() => {
+            this.setData({ showMaskHelp: false })
+          }, 3000)
         }
       } else {
         console.log('[backgroundReplace] 分割返回空，用颜色检测')
@@ -60,32 +70,51 @@ Page({
       console.log('[backgroundReplace] 分割失败，降级颜色检测:', err.message)
     }
 
-    // 获取分割结果后立即刷新预览
     this.updateBackground()
   },
 
-  selectBg(e) {
-    this.selectBgColor(e)
+  // 切换视图模式：原始 / 遮罩 / 结果
+  switchViewMode(e) {
+    const mode = e.currentTarget.dataset.mode
+    if (mode === this.data.viewMode) return
+
+    const imgMap = {
+      original: this.data.originalImageUrl,
+      mask: this.data.maskImageUrl || this.data.originalImageUrl,
+      result: this.data.previewUrl || this.data.originalImageUrl
+    }
+
+    this.setData({
+      viewMode: mode,
+      previewUrl: imgMap[mode]
+    })
+
+    // 切回结果模式时触发即时预览更新
+    if (mode === 'result' && this.data.selectedBgColor) {
+      this.updateBackground()
+    }
   },
+
+  selectBg(e) { this.selectBgColor(e) },
 
   selectBgColor(e) {
     const color = e.currentTarget.dataset.color
-    this.setData({ selectedBgColor: color })
+    this.setData({ selectedBgColor: color, viewMode: 'result' })
     this.updateBackground()
   },
 
   onBrightnessChange(e) {
-    this.setData({ brightness: e.detail.value })
+    this.setData({ brightness: e.detail.value, viewMode: 'result' })
     this.updateBackground()
   },
 
   onSmoothChange(e) {
-    this.setData({ smooth: e.detail.value })
+    this.setData({ smooth: e.detail.value, viewMode: 'result' })
     this.updateBackground()
   },
 
   onSaturationChange(e) {
-    this.setData({ saturation: e.detail.value })
+    this.setData({ saturation: e.detail.value, viewMode: 'result' })
     this.updateBackground()
   },
 
@@ -105,6 +134,7 @@ Page({
     wx.cloud.callFunction({
       name: 'replaceBackground',
       data: {
+        action: 'preview',
         imageUrl: croppedImage.previewUrl,
         bgColor: this.data.selectedBgColor,
         maskBase64: this.data.maskBase64 || '',
@@ -134,13 +164,8 @@ Page({
     })
   },
 
-  goBack() {
-    wx.navigateBack()
-  },
-
-  goNext() {
-    this.goToExport()
-  },
+  goBack() { wx.navigateBack() },
+  goNext() { this.goToExport() },
 
   goToExport() {
     if (!this.data.finalImageId && !this.data.previewUrl) {
