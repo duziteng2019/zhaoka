@@ -198,3 +198,17 @@ F:\zhaoka\
 - [实施计划](specs/id-photo-miniprogram/tasks.md)
 - [小程序开发规则](rules/miniprogram-development/rule.md)
 - [UI 设计规则](rules/ui-design/rule.md)
+
+
+## 配置说明
+
+### 人脸检测（腾讯云IAI）
+1. 开通 [人脸识别](https://console.cloud.tencent.com/iai) 服务
+2. 获取 [API密钥](https://console.cloud.tencent.com/cam/capi)
+3. 在微信云开发控制台 → 云函数 → `faceDetect` → 环境变量中设置：
+   - `SECRET_ID` = 你的SecretId
+   - `SECRET_KEY` = 你的SecretKey
+
+### 云开发环境
+- 在 `miniprogram/app.js` 中设置 `env` 为你的云环境ID
+- 创建数据库集合：users, medications, reminders, records, orders, history
