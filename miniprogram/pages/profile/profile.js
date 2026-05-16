@@ -52,12 +52,12 @@ Page({
   async login() {
     wx.showLoading({ title: '登录中...' })
     try {
-      const cloudManager = require('../../utils/enhancedCloud')
-      const result = await cloudManager.wechatLogin({})
+      const res = await wx.cloud.callFunction({ name: 'login', data: {} })
       wx.hideLoading()
-      if (result.code === 0) {
-        wx.setStorageSync('userInfo', result.data)
-        this.setData({ userInfo: result.data })
+      if (res.result && res.result.openid) {
+        const userInfo = { openid: res.result.openid }
+        wx.setStorageSync('userInfo', userInfo)
+        this.setData({ userInfo })
         wx.showToast({ title: '登录成功', icon: 'success' })
       } else {
         wx.showToast({ title: '登录失败', icon: 'none' })

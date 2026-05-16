@@ -3,81 +3,33 @@
   "functionRoot": "cloudfunctions",
   "functions": [
     {
-      "name": "auth",
+      "name": "login",
       "timeout": 5,
-      "memory": 256,
-      "installDependency": true
-    },
-    {
-      "name": "cropImage",
-      "timeout": 10,
-      "memory": 512,
-      "installDependency": true
-    },
-    {
-      "name": "replaceBackground",
-      "timeout": 10,
-      "memory": 512,
-      "installDependency": true
-    },
-    {
-      "name": "faceDetect",
-      "timeout": 10,
-      "memory": 512,
-      "installDependency": true
-    },
-    {
-      "name": "upload",
-      "timeout": 10,
-      "memory": 512,
-      "installDependency": true
-    },
-    {
-      "name": "saveHistory",
-      "timeout": 3,
-      "memory": 256,
-      "installDependency": true
-    },
-    {
-      "name": "getHistory",
-      "timeout": 3,
-      "memory": 256,
-      "installDependency": true
-    },
-    {
-      "name": "deleteHistory",
-      "timeout": 3,
-      "memory": 256,
-      "installDependency": true
-    },
-    {
-      "name": "createOrder",
-      "timeout": 5,
-      "memory": 256,
-      "installDependency": true
-    },
-    {
-      "name": "errorReport",
-      "timeout": 3,
-      "memory": 128,
-      "installDependency": true
-    },
-    {
-      "name": "perfReport",
-      "timeout": 3,
       "memory": 128,
       "installDependency": true
     },
     {
       "name": "getSpecs",
-      "timeout": 3,
+      "timeout": 5,
       "memory": 128,
       "installDependency": true
     },
     {
-      "name": "getOpenId",
-      "timeout": 3,
-      "memory": 128,
+      "name": "getHistory",
+      "timeout": 15,
+      "memory": 256,
+      "installDependency": true
+    },
+    {
+      "name": "createOrder",
+      "timeout": 15,
+      "memory": 256,
+      "installDependency": true
+    },
+    {
+      "name": "processPhoto",
+      "timeout": 30,
+      "memory": 512,
       "installDependency": true
     }
   ],

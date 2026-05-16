@@ -49,7 +49,7 @@ Page({
 
   selectSpec(e) {
     const id = e.currentTarget.dataset.spec
-    const spec = this.data.specs.find(s => s.id == id)
+    const spec = this.data.specs.find(s => s._id == id || s.id == id)
     if (!spec) return
     this.setData({ selectedSpec: spec })
     // 直接进入拍照/选照片
@@ -90,8 +90,8 @@ Page({
           action: 'preview',
           fileID: up.fileID,
           bgColor: 'white',
-          specWidth: this.data.selectedSpec?.width || 25,
-          specHeight: this.data.selectedSpec?.height || 35
+          specWidth: (this.data.selectedSpec && this.data.selectedSpec.width) || 25,
+          specHeight: (this.data.selectedSpec && this.data.selectedSpec.height) || 35
         }
       })
 

@@ -11,7 +11,7 @@ App({
       return
     }
     wx.cloud.init({
-      env: 'medication-reminder-dev',
+      env: 'cloud1-2ge2s3ln9adb1998',
       traceUser: true
     })
     this.autoLogin()

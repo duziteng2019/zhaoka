@@ -41,9 +41,9 @@ Page({
 
     wx.cloud.callFunction({
       name: 'getHistory',
-      data: { page: this.data.page, limit: 10 },
+      data: { page: this.data.page, pageSize: 10 },
       success: res => {
-        const items = (res.result && res.result.data && res.result.data.historyList) || []
+        const items = (res.result && res.result.data && res.result.data.list) || []
         const formatted = items.map(item => this.formatItem(item))
         const merged = [...this.data.historyList, ...formatted]
 
@@ -65,14 +65,15 @@ Page({
   },
 
   formatItem(item) {
-    const t = item.create_time || item.createTime || ''
+    const t = item.createdAt || ''
     const d = t ? new Date(t) : null
     const dateStr = d ? `${d.getMonth()+1}月${d.getDate()}日` : ''
     return {
       ...item,
+      _id: item._id,
       createTime: dateStr,
       bgColorName: this.getBgColorName(item.bgColor),
-      thumbUrl: item.thumbUrl || item.finalFileID || ''
+      thumbUrl: item.fileID || ''
     }
   },
 

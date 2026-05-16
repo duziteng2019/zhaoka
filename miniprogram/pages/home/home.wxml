@@ -38,7 +38,7 @@
         </view>
       </view>
       <view class="specs-grid" wx:else>
-        <view class="spec-card" wx:for="{{specs}}" wx:key="id" bindtap="selectSpec" data-spec="{{item.id}}">
+        <view class="spec-card" wx:for="{{specs}}" wx:key="_id" bindtap="selectSpec" data-spec="{{item._id}}">
           <view class="spec-icon {{'color-' + (index % 4)}}">{{item.name.slice(0,1)}}</view>
           <view class="spec-info">
             <text class="spec-name">{{item.name}}</text>
@@ -80,7 +80,7 @@
     <view class="result-section">
       <!-- 头部 -->
       <view class="result-header">
-        <text class="result-title">{{selectedSpec?.name || '证件照'}}</text>
+        <text class="result-title">{{selectedSpec && selectedSpec.name || '证件照'}}</text>
         <view class="result-actions">
           <view class="result-action" bindtap="reset">重新选</view>
           <view class="result-action" bindtap="chooseImage">换照片</view>
@@ -96,7 +96,7 @@
       <!-- 结果 -->
       <view class="result-preview" wx:elif="{{processed}}">
         <image src="{{resultPreview}}" mode="aspectFit" class="result-image"></image>
-        <view class="result-badge">{{selectedSpec?.size || ''}} 白色背景</view>
+        <view class="result-badge">{{selectedSpec && selectedSpec.size || ''}} 白色背景</view>
       </view>
 
       <!-- 背景色选择 -->
