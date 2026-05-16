@@ -181,9 +181,7 @@ class Logger {
     if (!this.remoteEnabled) return;
 
     try {
-      const cloud = require('./wx-server-sdk').default;
-
-      await cloud.callFunction({
+      await wx.cloud.callFunction({
         name: 'logUpload',
         data: {
           logs: this.logs,
